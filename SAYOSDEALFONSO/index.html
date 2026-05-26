@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>SAYOSDEALFONSO</title>
+  <link rel="icon" type="image/png" href="public/favicon.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      background-color: #000;
+    }
+
+        /* Contenedor del video - pantalla completa */
+    .video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    /* El iframe cobreix tota la pantalla sense fons negre */
+    .video-container iframe {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    /* Si la finestra és més ampla que 16:9 */
+    @media (min-aspect-ratio: 16/9) {
+      .video-container iframe {
+        width: 100%;
+        height: auto;
+        min-height: 100%;
+      }
+    }
+
+    /* Si la finestra és més alta que 16:9 */
+    @media (max-aspect-ratio: 16/9) {
+      .video-container iframe {
+        width: auto;
+        height: 100%;
+        min-width: 100%;
+      }
+    }
+
+    /* Overlay transparente que captura los clics */
+    .click-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    /* Texto esquina superior izquierda */
+    .titulo {
+      position: fixed;
+      top: 40px;
+      left: 40px;
+      z-index: 2;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 2.2rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: white;
+      background: transparent;
+      text-decoration: none;
+      pointer-events: none;
+    }
+
+    /* Texto esquina superior derecha */
+    .subtitulo {
+      position: fixed;
+      top: 48px;
+      right: 40px;
+      z-index: 2;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 1px;
+      color: white;
+      background: transparent;
+      text-decoration: none;
+      pointer-events: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .titulo {
+        top: 20px;
+        left: 20px;
+        font-size: 1.4rem;
+      }
+      .subtitulo {
+        top: 24px;
+        right: 20px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Contenedor del video Vimeo -->
+  <div id="bgVideoContainer" class="video-container"></div>
+  
+  <!-- Overlay para capturar clics -->
+  <div id="clickOverlay" class="click-overlay"></div>
+  
+  <!-- Textos en las esquinas superiores -->
+  <div class="titulo">SAYOS DE ALFONSO</div>
+  <div class="subtitulo">Architects</div>
+
+  <script src="https://player.vimeo.com/api/player.js"></script>
+  <script>
+    (function() {
+      const vimeoIds = [
+        "1190537591",
+        "1190537623",
+        "1190537660",
+        "1190537698",
+        "1190537788",
+        "1190537788",
+        "1190537820",
+        "1190537849"
+      ];
+
+      let currentPlayer = null;
+      let currentIndex = -1;
+
+      function createVimeoIframe(videoId, autoplay = true) {
+        const iframe = document.createElement('iframe');
+        let src = `https://player.vimeo.com/video/${videoId}?badge=0&autopause=0&player_id=0&app_id=58479&loop=1&muted=1&controls=0&background=1`;
+        if (autoplay) {
+          src += `&autoplay=1`;
+        }
+        iframe.src = src;
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share');
+        iframe.setAttribute('allowfullscreen', '');
+        return iframe;
+      }
+
+      function loadVideoByIndex(index) {
+        const container = document.getElementById('bgVideoContainer');
+        if (!container) return;
+        
+        while (container.firstChild) {
+          container.removeChild(container.firstChild);
+        }
+        
+        const iframe = createVimeoIframe(vimeoIds[index], true);
+        container.appendChild(iframe);
+        
+        currentIndex = index;
+        
+        const player = new Vimeo.Player(iframe);
+        currentPlayer = player;
+        player.setVolume(0);
+        player.play().catch(e => console.log("Autoplay requiere interacción", e));
+      }
+
+      function getRandomDifferentIndex(avoidIndex) {
+        if (vimeoIds.length === 1) return 0;
+        let newIndex;
+        do {
+          newIndex = Math.floor(Math.random() * vimeoIds.length);
+        } while (newIndex === avoidIndex && vimeoIds.length > 1);
+        return newIndex;
+      }
+
+      function changeToRandomVideo() {
+        let newIndex;
+        if (currentIndex === -1) {
+          newIndex = Math.floor(Math.random() * vimeoIds.length);
+        } else {
+          newIndex = getRandomDifferentIndex(currentIndex);
+        }
+        loadVideoByIndex(newIndex);
+      }
+
+      function initRandomBackground() {
+        const initialIndex = Math.floor(Math.random() * vimeoIds.length);
+        loadVideoByIndex(initialIndex);
+      }
+
+      const overlay = document.getElementById('clickOverlay');
+      if (overlay) {
+        overlay.addEventListener('click', (e) => {
+          e.stopPropagation();
+          changeToRandomVideo();
+        });
+      }
+
+      initRandomBackground();
+
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && currentPlayer) {
+          currentPlayer.play().catch(e => {});
+        }
+      });
+    })();
+  </script>
+
+  <!-- FOOTER AMB TEXT I ICONES CENTRADES (RESPONSIVE) -->
+  <div style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: white; z-index: 10; padding: 15px 20px;">
+    <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+      <!-- Text en cursiva -->
+      <p style="font-style: italic; font-size: 10px; margin: 0 0 15px 0; color: #333; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+        Aquesta actuació està impulsada i subvencionada pel Departament d'Empresa i Treball i cofinançada per la Unió Europea mitjançant el Fons Social Europeu Plus.
+      </p>
+      <!-- Icones responsive -->
+      <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
+        <img src="public/images/icons/icon_1.png" alt="Icona 1" style="width: min(150px, 25vw); height: auto; cursor: default;">
+        <img src="public/images/icons/icon_2.png" alt="Icona 2" style="width: min(150px, 25vw); height: auto; cursor: default;">
+        <img src="public/images/icons/icon_3.jpg" alt="Icona 3" style="width: min(150px, 25vw); height: auto; cursor: default;">
+        <img src="public/images/icons/icon_4.svg" alt="Icona 4" style="width: min(150px, 25vw); height: auto; cursor: default;">
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
