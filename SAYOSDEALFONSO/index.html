@@ -30,30 +30,57 @@
       overflow: hidden;
     }
 
-    /* El iframe cobreix tota la pantalla sense fons negre */
+    /* Base: escala per defecte */
     .video-container iframe {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      transform: translate(-50%, -50%) scale(1.5);
       pointer-events: none;
+      object-fit: cover;
     }
 
-    /* Si la finestra és més ampla que 16:9 */
-    @media (min-aspect-ratio: 16/9) {
+    /* Pantalles menys de 900px */
+    @media (max-width: 900px) {
       .video-container iframe {
-        width: 100%;
-        height: auto;
-        min-height: 100%;
+        transform: translate(-50%, -50%) scale(2);
       }
     }
 
-    /* Si la finestra és més alta que 16:9 */
-    @media (max-aspect-ratio: 16/9) {
+    /* Pantalles menys de 740px */
+    @media (max-width: 740px) {
       .video-container iframe {
-        width: auto;
-        height: 100%;
-        min-width: 100%;
+        transform: translate(-50%, -50%) scale(2.8);
+      }
+    }
+
+    /* Pantalles menys de 600px */
+    @media (max-width: 600px) {
+      .video-container iframe {
+        transform: translate(-50%, -50%) scale(3.5);
+      }
+    }
+
+    /* Pantalles menys de 480px */
+    @media (max-width: 480px) {
+      .video-container iframe {
+        transform: translate(-50%, -50%) scale(4.5);
+      }
+    }
+
+    /* Pantalles menys de 400px */
+    @media (max-width: 400px) {
+      .video-container iframe {
+        transform: translate(-50%, -50%) scale(5.5);
+      }
+    }
+
+    /* Pantalles menys de 320px */
+    @media (max-width: 320px) {
+      .video-container iframe {
+        transform: translate(-50%, -50%) scale(7);
       }
     }
 
@@ -69,20 +96,20 @@
       background: transparent;
     }
 
-    /* Texto esquina superior izquierda */
-    .titulo {
+    /* Logo esquina superior izquierda */
+    .logo-container {
       position: fixed;
       top: 40px;
       left: 40px;
       z-index: 2;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 2.2rem;
-      font-weight: 500;
-      letter-spacing: 1px;
-      color: white;
-      background: transparent;
-      text-decoration: none;
-      pointer-events: none;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .logo-container img {
+      height: 50px;
+      width: auto;
+      transition: all 0.3s ease;
     }
 
     /* Texto esquina superior derecha */
@@ -103,10 +130,12 @@
 
     /* Responsive */
     @media (max-width: 640px) {
-      .titulo {
+      .logo-container {
         top: 20px;
         left: 20px;
-        font-size: 1.4rem;
+      }
+      .logo-container img {
+        height: 35px;
       }
       .subtitulo {
         top: 24px;
@@ -124,8 +153,12 @@
   <!-- Overlay para capturar clics -->
   <div id="clickOverlay" class="click-overlay"></div>
   
-  <!-- Textos en las esquinas superiores -->
-  <div class="titulo">SAYOS DE ALFONSO</div>
+  <!-- Logo esquina superior izquierda -->
+  <div class="logo-container">
+    <img src="public/logo.png" alt="SAYOS DE ALFONSO" id="logo">
+  </div>
+  
+  <!-- Texto esquina superior derecha -->
   <div class="subtitulo">Architects</div>
 
   <script src="https://player.vimeo.com/api/player.js"></script>
@@ -216,17 +249,30 @@
           currentPlayer.play().catch(e => {});
         }
       });
+
+      // Logo hover effect
+      const logo = document.getElementById('logo');
+      if (logo) {
+        const logoSrc = 'public/logo.png';
+        const logoSrcHover = 'public/logo-hover.png';
+        
+        logo.addEventListener('mouseenter', () => {
+          logo.src = logoSrcHover;
+        });
+        
+        logo.addEventListener('mouseleave', () => {
+          logo.src = logoSrc;
+        });
+      }
     })();
   </script>
 
   <!-- FOOTER AMB TEXT I ICONES CENTRADES (RESPONSIVE) -->
   <div style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: white; z-index: 10; padding: 15px 20px;">
     <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
-      <!-- Text en cursiva -->
       <p style="font-style: italic; font-size: 10px; margin: 0 0 15px 0; color: #333; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
         Aquesta actuació està impulsada i subvencionada pel Departament d'Empresa i Treball i cofinançada per la Unió Europea mitjançant el Fons Social Europeu Plus.
       </p>
-      <!-- Icones responsive -->
       <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
         <img src="public/images/icons/icon_1.png" alt="Icona 1" style="width: min(150px, 25vw); height: auto; cursor: default;">
         <img src="public/images/icons/icon_2.png" alt="Icona 2" style="width: min(150px, 25vw); height: auto; cursor: default;">
