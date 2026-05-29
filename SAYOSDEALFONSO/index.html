@@ -33,14 +33,14 @@
       left: 0;
       width: 100%;
       height: 100%;
-      transition: opacity 0.4s ease-in-out;
-      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      opacity: 1;
       z-index: 1;
     }
     
-    .video-layer.active {
-      opacity: 1;
-      z-index: 2;
+    .video-layer.hidden {
+      opacity: 0;
+      z-index: 0;
     }
     
     .video-layer iframe {
@@ -139,7 +139,7 @@
 
   <div class="video-container">
     <div id="videoLayer1" class="video-layer"></div>
-    <div id="videoLayer2" class="video-layer"></div>
+    <div id="videoLayer2" class="video-layer hidden"></div>
     <div id="clickOverlay" class="click-overlay"></div>
     <div class="logo-container">
       <img src="public/logo.png" alt="SAYOS DE ALFONSO" id="logo">
@@ -178,8 +178,6 @@
       let currentIndex = -1;
       let currentLayer = 1;
       let isChanging = false;
-      let preloadPlayer = null;
-      let preloadIframe = null;
       
       const layer1 = document.getElementById('videoLayer1');
       const layer2 = document.getElementById('videoLayer2');
@@ -209,83 +207,63 @@
         return iframe;
       }
 
-      function preloadNextVideo() {
-        const nextIndex = (currentIndex + 1) % vimeoIds.length;
-        const nextVideoId = vimeoIds[nextIndex];
-        const inactiveLayer = (currentLayer === 1) ? layer2 : layer1;
-        
-        if (preloadPlayer && preloadIframe && preloadIframe.parentNode) {
-          try {
-            preloadPlayer.destroy();
-          } catch(e) {}
-          while (inactiveLayer.firstChild) {
-            inactiveLayer.removeChild(inactiveLayer.firstChild);
-          }
+      function loadVideoInLayer(layer, videoId, callback) {
+        while (layer.firstChild) {
+          layer.removeChild(layer.firstChild);
         }
         
-        const iframe = createVimeoIframe(nextVideoId, true);
-        inactiveLayer.appendChild(iframe);
+        const iframe = createVimeoIframe(videoId, true);
+        layer.appendChild(iframe);
         
-        preloadIframe = iframe;
-        preloadPlayer = new Vimeo.Player(iframe);
-        preloadPlayer.setVolume(0);
+        const player = new Vimeo.Player(iframe);
+        player.setVolume(0);
         
-        preloadPlayer.ready().catch(() => {
-          preloadPlayer = null;
+        player.ready().then(() => {
+          player.play().then(() => {
+            if (callback) callback(player);
+          }).catch(() => {
+            if (callback) callback(player);
+          });
+        }).catch(() => {
+          if (callback) callback(player);
         });
       }
 
       function transitionToNextVideo() {
-        if (isChanging) {
-          return;
-        }
-        
-        if (!preloadPlayer) {
-          preloadNextVideo();
-          setTimeout(() => {
-            if (preloadPlayer) {
-              transitionToNextVideo();
-            }
-          }, 500);
-          return;
-        }
+        if (isChanging) return;
         
         isChanging = true;
         
         const nextIndex = (currentIndex + 1) % vimeoIds.length;
-        const oldLayer = (currentLayer === 1) ? layer1 : layer2;
-        const newLayer = (currentLayer === 1) ? layer2 : layer1;
+        const nextVideoId = vimeoIds[nextIndex];
+        const currentLayerElem = (currentLayer === 1) ? layer1 : layer2;
+        const nextLayerElem = (currentLayer === 1) ? layer2 : layer1;
         
-        newLayer.classList.add('active');
+        nextLayerElem.classList.remove('hidden');
         
-        setTimeout(() => {
-          if (currentPlayer) {
-            try {
-              currentPlayer.setVolume(0);
-            } catch(e) {}
-          }
-          
-          currentPlayer = preloadPlayer;
-          currentIndex = nextIndex;
-          currentLayer = (currentLayer === 1) ? 2 : 1;
-          saveIndex(currentIndex);
-          
+        loadVideoInLayer(nextLayerElem, nextVideoId, (newPlayer) => {
           setTimeout(() => {
-            oldLayer.classList.remove('active');
-            while (oldLayer.firstChild) {
-              oldLayer.removeChild(oldLayer.firstChild);
-            }
-          }, 200);
-          
-          preloadPlayer = null;
-          preloadIframe = null;
-          
-          setTimeout(() => {
-            preloadNextVideo();
-          }, 100);
-          
-          isChanging = false;
-        }, 50);
+            currentLayerElem.classList.add('hidden');
+            
+            currentPlayer = newPlayer;
+            currentIndex = nextIndex;
+            currentLayer = (currentLayer === 1) ? 2 : 1;
+            saveIndex(currentIndex);
+            
+            setTimeout(() => {
+              const oldLayerElem = (currentLayer === 1) ? layer2 : layer1;
+              oldLayerElem.classList.add('hidden');
+              
+              setTimeout(() => {
+                while (oldLayerElem.firstChild) {
+                  oldLayerElem.removeChild(oldLayerElem.firstChild);
+                }
+              }, 100);
+            }, 50);
+            
+            isChanging = false;
+          }, 50);
+        });
       }
 
       function loadInitialVideo(index) {
@@ -296,6 +274,8 @@
           layer2.removeChild(layer2.firstChild);
         }
         
+        layer2.classList.add('hidden');
+        
         const iframe = createVimeoIframe(vimeoIds[index], true);
         layer1.appendChild(iframe);
         
@@ -305,14 +285,8 @@
         currentLayer = 1;
         saveIndex(currentIndex);
         
-        layer1.classList.add('active');
-        layer2.classList.remove('active');
-        
         currentPlayer.ready().then(() => {
           currentPlayer.play().catch(() => {});
-          setTimeout(() => {
-            preloadNextVideo();
-          }, 500);
         }).catch(() => {});
       }
 
