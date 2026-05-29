@@ -18,17 +18,32 @@
       background-color: #000;
     }
 
-    /* Contenedor del video - ocupa toda la pantalla inicial */
     .video-container {
       position: relative;
       width: 100%;
       height: 100vh;
       z-index: 0;
       overflow: hidden;
+      background-color: #000;
     }
 
-    /* Base: escala per defecte */
-    .video-container iframe {
+    .video-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.4s ease-in-out;
+      opacity: 0;
+      z-index: 1;
+    }
+    
+    .video-layer.active {
+      opacity: 1;
+      z-index: 2;
+    }
+    
+    .video-layer iframe {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -39,67 +54,59 @@
       object-fit: cover;
     }
 
-    /* Pantalles menys de 900px */
     @media (max-width: 900px) {
-      .video-container iframe {
+      .video-layer iframe {
         transform: translate(-50%, -50%) scale(2);
       }
     }
 
-    /* Pantalles menys de 740px */
     @media (max-width: 740px) {
-      .video-container iframe {
+      .video-layer iframe {
         transform: translate(-50%, -50%) scale(2.8);
       }
     }
 
-    /* Pantalles menys de 600px */
     @media (max-width: 600px) {
-      .video-container iframe {
+      .video-layer iframe {
         transform: translate(-50%, -50%) scale(3.5);
       }
     }
 
-    /* Pantalles menys de 480px */
     @media (max-width: 480px) {
-      .video-container iframe {
+      .video-layer iframe {
         transform: translate(-50%, -50%) scale(4.5);
       }
     }
 
-    /* Pantalles menys de 400px */
     @media (max-width: 400px) {
-      .video-container iframe {
+      .video-layer iframe {
         transform: translate(-50%, -50%) scale(5.5);
       }
     }
 
-    /* Pantalles menys de 320px */
     @media (max-width: 320px) {
-      .video-container iframe {
+      .video-layer iframe {
         transform: translate(-50%, -50%) scale(7);
       }
     }
 
-    /* Overlay transparente que captura los clics */
     .click-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 1;
+      z-index: 10;
       cursor: pointer;
       background: transparent;
     }
 
-    /* Logo centrado arriba (solo en desktop) */
     .logo-container {
       position: absolute;
       top: 40px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 2;
+      z-index: 11;
       pointer-events: auto;
       cursor: pointer;
     }
@@ -110,7 +117,6 @@
       transition: all 0.3s ease;
     }
 
-    /* En mòbil, el logo torna a l'esquerra */
     @media (max-width: 640px) {
       .logo-container {
         top: 20px;
@@ -122,36 +128,24 @@
       }
     }
 
-    /* Footer - normal, debajo del video */
     .footer {
       width: 100%;
       background-color: white;
       padding: 10px 15px;
     }
-
-    /* Responsive */
-    @media (max-width: 640px) {
-      .logo-container {
-        left: 20px;
-      }
-      .logo-container img {
-        height: 35px;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <!-- Contenedor del video - pantalla completa inicial -->
   <div class="video-container">
-    <div id="bgVideoContainer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+    <div id="videoLayer1" class="video-layer"></div>
+    <div id="videoLayer2" class="video-layer"></div>
     <div id="clickOverlay" class="click-overlay"></div>
     <div class="logo-container">
       <img src="public/logo.png" alt="SAYOS DE ALFONSO" id="logo">
     </div>
   </div>
 
-  <!-- FOOTER AMB TEXT I ICONES (debajo del video, con scroll) -->
   <div class="footer">
     <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
       <p style="font-style: italic; font-size: 9px; margin: 0 0 10px 0; color: #333; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
@@ -166,141 +160,206 @@
     </div>
   </div>
 
- <script src="https://player.vimeo.com/api/player.js"></script>
-<script>
-  (function() {
-    const vimeoIds = [
-      "1196639365",
-      "1190537623",
-      "1196639364",
-      "1196639407",
-      "1196639406",
-      "1196639363",
-      "1196639383",
-      "1196639404"
-    ];
+  <script src="https://player.vimeo.com/api/player.js"></script>
+  <script>
+    (function() {
+      const vimeoIds = [
+        "1196639365",
+        "1190537623",
+        "1196639364",
+        "1196639407",
+        "1196639406",
+        "1196639363",
+        "1196639383",
+        "1196639404"
+      ];
 
-    let currentPlayer = null;
-    let currentIndex = -1;
-    let sessionStartingIndex = -1; // Guarda l'índex inicial de la sessió
-    
-    // CLAU: Guardar a sessionStorage (només dura la sessió, NO entre recàrregues)
-    function getSessionIndex() {
-      const stored = sessionStorage.getItem('vimeoSessionIndex');
-      if (stored !== null && !isNaN(parseInt(stored))) {
-        return parseInt(stored);
-      }
-      return -1;
-    }
-    
-    function saveSessionIndex(index) {
-      sessionStorage.setItem('vimeoSessionIndex', index);
-    }
-    
-    // Funció per obtenir el següent índex en ordre circular
-    function getNextSequentialIndex(currentIdx) {
-      return (currentIdx + 1) % vimeoIds.length;
-    }
-    
-    // Funció per obtenir un índex aleatori diferent de l'anterior (per la càrrega inicial)
-    function getRandomDifferentIndex(avoidIndex) {
-      if (vimeoIds.length === 1) return 0;
-      let newIndex;
-      do {
-        newIndex = Math.floor(Math.random() * vimeoIds.length);
-      } while (newIndex === avoidIndex);
-      return newIndex;
-    }
-
-    function createVimeoIframe(videoId, autoplay = true) {
-      const iframe = document.createElement('iframe');
-      let src = `https://player.vimeo.com/video/${videoId}?badge=0&autopause=0&player_id=0&app_id=58479&loop=1&muted=1&controls=0&background=1`;
-      if (autoplay) {
-        src += `&autoplay=1`;
-      }
-      iframe.src = src;
-      iframe.setAttribute('frameborder', '0');
-      iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share');
-      iframe.setAttribute('allowfullscreen', '');
-      return iframe;
-    }
-
-    function loadVideoByIndex(index) {
-      const container = document.getElementById('bgVideoContainer');
-      if (!container) return;
+      let currentPlayer = null;
+      let currentIndex = -1;
+      let currentLayer = 1;
+      let isChanging = false;
+      let preloadPlayer = null;
+      let preloadIframe = null;
       
-      while (container.firstChild) {
-        container.removeChild(container.firstChild);
+      const layer1 = document.getElementById('videoLayer1');
+      const layer2 = document.getElementById('videoLayer2');
+      
+      function getStoredIndex() {
+        const stored = sessionStorage.getItem('vimeoCurrentIndex');
+        if (stored !== null && !isNaN(parseInt(stored))) {
+          return parseInt(stored);
+        }
+        return -1;
       }
       
-      const iframe = createVimeoIframe(vimeoIds[index], true);
-      container.appendChild(iframe);
-      
-      currentIndex = index;
-      saveSessionIndex(currentIndex);
-      
-      const player = new Vimeo.Player(iframe);
-      currentPlayer = player;
-      player.setVolume(0);
-      player.play().catch(e => console.log("Autoplay requiere interacción", e));
-    }
-
-    // Funció per canviar al SEGÜENT video en ordre seqüencial
-    function changeToNextVideo() {
-      const nextIndex = getNextSequentialIndex(currentIndex);
-      loadVideoByIndex(nextIndex);
-    }
-
-    function initRandomBackground() {
-      // Comprovar si hi ha un índex de sessió actiu
-      let storedIndex = getSessionIndex();
-      
-      if (storedIndex === -1) {
-        // PRIMERA CARREGA DE LA SESSIÓ: Video aleatori
-        const randomIndex = Math.floor(Math.random() * vimeoIds.length);
-        sessionStartingIndex = randomIndex;
-        loadVideoByIndex(randomIndex);
-      } else {
-        // RECARREGA DE PÀGINA DINS DE LA MATEIXA SESSIÓ:
-        // Mantenim el mateix índex (no canvia aleatòriament en recarregar)
-        // Però si vols que CANVII cada cop que recarreguis (fins i tot dins la sessió),
-        // descomenta la línia següent i comenta les dues de dalt
-        loadVideoByIndex(storedIndex);
+      function saveIndex(index) {
+        sessionStorage.setItem('vimeoCurrentIndex', index);
       }
-    }
 
-    const overlay = document.getElementById('clickOverlay');
-    if (overlay) {
-      overlay.addEventListener('click', (e) => {
-        e.stopPropagation();
-        changeToNextVideo();  // SEMPRE va al següent en ordre
+      function createVimeoIframe(videoId, autoplay = true) {
+        const iframe = document.createElement('iframe');
+        let src = `https://player.vimeo.com/video/${videoId}?badge=0&autopause=0&player_id=0&app_id=58479&loop=1&muted=1&controls=0&background=1`;
+        if (autoplay) {
+          src += `&autoplay=1`;
+        }
+        iframe.src = src;
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share');
+        iframe.setAttribute('allowfullscreen', '');
+        return iframe;
+      }
+
+      function preloadNextVideo() {
+        const nextIndex = (currentIndex + 1) % vimeoIds.length;
+        const nextVideoId = vimeoIds[nextIndex];
+        const inactiveLayer = (currentLayer === 1) ? layer2 : layer1;
+        
+        if (preloadPlayer && preloadIframe && preloadIframe.parentNode) {
+          try {
+            preloadPlayer.destroy();
+          } catch(e) {}
+          while (inactiveLayer.firstChild) {
+            inactiveLayer.removeChild(inactiveLayer.firstChild);
+          }
+        }
+        
+        const iframe = createVimeoIframe(nextVideoId, true);
+        inactiveLayer.appendChild(iframe);
+        
+        preloadIframe = iframe;
+        preloadPlayer = new Vimeo.Player(iframe);
+        preloadPlayer.setVolume(0);
+        
+        preloadPlayer.ready().catch(() => {
+          preloadPlayer = null;
+        });
+      }
+
+      function transitionToNextVideo() {
+        if (isChanging) {
+          return;
+        }
+        
+        if (!preloadPlayer) {
+          preloadNextVideo();
+          setTimeout(() => {
+            if (preloadPlayer) {
+              transitionToNextVideo();
+            }
+          }, 500);
+          return;
+        }
+        
+        isChanging = true;
+        
+        const nextIndex = (currentIndex + 1) % vimeoIds.length;
+        const oldLayer = (currentLayer === 1) ? layer1 : layer2;
+        const newLayer = (currentLayer === 1) ? layer2 : layer1;
+        
+        newLayer.classList.add('active');
+        
+        setTimeout(() => {
+          if (currentPlayer) {
+            try {
+              currentPlayer.setVolume(0);
+            } catch(e) {}
+          }
+          
+          currentPlayer = preloadPlayer;
+          currentIndex = nextIndex;
+          currentLayer = (currentLayer === 1) ? 2 : 1;
+          saveIndex(currentIndex);
+          
+          setTimeout(() => {
+            oldLayer.classList.remove('active');
+            while (oldLayer.firstChild) {
+              oldLayer.removeChild(oldLayer.firstChild);
+            }
+          }, 200);
+          
+          preloadPlayer = null;
+          preloadIframe = null;
+          
+          setTimeout(() => {
+            preloadNextVideo();
+          }, 100);
+          
+          isChanging = false;
+        }, 50);
+      }
+
+      function loadInitialVideo(index) {
+        while (layer1.firstChild) {
+          layer1.removeChild(layer1.firstChild);
+        }
+        while (layer2.firstChild) {
+          layer2.removeChild(layer2.firstChild);
+        }
+        
+        const iframe = createVimeoIframe(vimeoIds[index], true);
+        layer1.appendChild(iframe);
+        
+        currentPlayer = new Vimeo.Player(iframe);
+        currentPlayer.setVolume(0);
+        currentIndex = index;
+        currentLayer = 1;
+        saveIndex(currentIndex);
+        
+        layer1.classList.add('active');
+        layer2.classList.remove('active');
+        
+        currentPlayer.ready().then(() => {
+          currentPlayer.play().catch(() => {});
+          setTimeout(() => {
+            preloadNextVideo();
+          }, 500);
+        }).catch(() => {});
+      }
+
+      function initRandomBackground() {
+        let storedIndex = getStoredIndex();
+        
+        if (storedIndex === -1) {
+          const randomIndex = Math.floor(Math.random() * vimeoIds.length);
+          loadInitialVideo(randomIndex);
+        } else {
+          loadInitialVideo(storedIndex);
+        }
+      }
+
+      const overlay = document.getElementById('clickOverlay');
+      if (overlay) {
+        overlay.addEventListener('click', (e) => {
+          e.stopPropagation();
+          transitionToNextVideo();
+        });
+      }
+
+      const logo = document.getElementById('logo');
+      if (logo) {
+        const logoSrc = 'public/logo.png';
+        const logoSrcHover = 'public/logo-hover.png';
+        logo.addEventListener('mouseenter', () => { 
+          logo.src = logoSrcHover; 
+        });
+        logo.addEventListener('mouseleave', () => { 
+          logo.src = logoSrc; 
+        });
+        
+        logo.addEventListener('click', (e) => {
+          e.stopPropagation();
+          window.location.href = 'mailto:sayosdealfonso@gmail.com';
+        });
+      }
+
+      initRandomBackground();
+
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && currentPlayer) {
+          currentPlayer.play().catch(() => {});
+        }
       });
-    }
-
-    initRandomBackground();
-
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && currentPlayer) {
-        currentPlayer.play().catch(e => {});
-      }
-    });
-
-    // Logo hover effect
-    const logo = document.getElementById('logo');
-    if (logo) {
-      const logoSrc = 'public/logo.png';
-      const logoSrcHover = 'public/logo-hover.png';
-      
-      logo.addEventListener('mouseenter', () => {
-        logo.src = logoSrcHover;
-      });
-      
-      logo.addEventListener('mouseleave', () => {
-        logo.src = logoSrc;
-      });
-    }
-  })();
-</script>
-
+    })();
+  </script>
 </body>
 </html>
