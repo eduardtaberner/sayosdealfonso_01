@@ -166,111 +166,141 @@
     </div>
   </div>
 
-  <script src="https://player.vimeo.com/api/player.js"></script>
-  <script>
-    (function() {
-      const vimeoIds = [
-        "1196639365",
-        "1190537623",
-        "1196639364",
-        "1196639407",
-        "1196639406",
-        "1196639363",
-        "1196639383",
-        "1196639404"
-      ];
+ <script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+  (function() {
+    const vimeoIds = [
+      "1196639365",
+      "1190537623",
+      "1196639364",
+      "1196639407",
+      "1196639406",
+      "1196639363",
+      "1196639383",
+      "1196639404"
+    ];
 
-      let currentPlayer = null;
-      let currentIndex = -1;
-
-      function createVimeoIframe(videoId, autoplay = true) {
-        const iframe = document.createElement('iframe');
-        let src = `https://player.vimeo.com/video/${videoId}?badge=0&autopause=0&player_id=0&app_id=58479&loop=1&muted=1&controls=0&background=1`;
-        if (autoplay) {
-          src += `&autoplay=1`;
-        }
-        iframe.src = src;
-        iframe.setAttribute('frameborder', '0');
-        iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share');
-        iframe.setAttribute('allowfullscreen', '');
-        return iframe;
+    let currentPlayer = null;
+    let currentIndex = -1;
+    let sessionStartingIndex = -1; // Guarda l'índex inicial de la sessió
+    
+    // CLAU: Guardar a sessionStorage (només dura la sessió, NO entre recàrregues)
+    function getSessionIndex() {
+      const stored = sessionStorage.getItem('vimeoSessionIndex');
+      if (stored !== null && !isNaN(parseInt(stored))) {
+        return parseInt(stored);
       }
+      return -1;
+    }
+    
+    function saveSessionIndex(index) {
+      sessionStorage.setItem('vimeoSessionIndex', index);
+    }
+    
+    // Funció per obtenir el següent índex en ordre circular
+    function getNextSequentialIndex(currentIdx) {
+      return (currentIdx + 1) % vimeoIds.length;
+    }
+    
+    // Funció per obtenir un índex aleatori diferent de l'anterior (per la càrrega inicial)
+    function getRandomDifferentIndex(avoidIndex) {
+      if (vimeoIds.length === 1) return 0;
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * vimeoIds.length);
+      } while (newIndex === avoidIndex);
+      return newIndex;
+    }
 
-      function loadVideoByIndex(index) {
-        const container = document.getElementById('bgVideoContainer');
-        if (!container) return;
-        
-        while (container.firstChild) {
-          container.removeChild(container.firstChild);
-        }
-        
-        const iframe = createVimeoIframe(vimeoIds[index], true);
-        container.appendChild(iframe);
-        
-        currentIndex = index;
-        
-        const player = new Vimeo.Player(iframe);
-        currentPlayer = player;
-        player.setVolume(0);
-        player.play().catch(e => console.log("Autoplay requiere interacción", e));
+    function createVimeoIframe(videoId, autoplay = true) {
+      const iframe = document.createElement('iframe');
+      let src = `https://player.vimeo.com/video/${videoId}?badge=0&autopause=0&player_id=0&app_id=58479&loop=1&muted=1&controls=0&background=1`;
+      if (autoplay) {
+        src += `&autoplay=1`;
       }
+      iframe.src = src;
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share');
+      iframe.setAttribute('allowfullscreen', '');
+      return iframe;
+    }
 
-      function getRandomDifferentIndex(avoidIndex) {
-        if (vimeoIds.length === 1) return 0;
-        let newIndex;
-        do {
-          newIndex = Math.floor(Math.random() * vimeoIds.length);
-        } while (newIndex === avoidIndex && vimeoIds.length > 1);
-        return newIndex;
+    function loadVideoByIndex(index) {
+      const container = document.getElementById('bgVideoContainer');
+      if (!container) return;
+      
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
       }
+      
+      const iframe = createVimeoIframe(vimeoIds[index], true);
+      container.appendChild(iframe);
+      
+      currentIndex = index;
+      saveSessionIndex(currentIndex);
+      
+      const player = new Vimeo.Player(iframe);
+      currentPlayer = player;
+      player.setVolume(0);
+      player.play().catch(e => console.log("Autoplay requiere interacción", e));
+    }
 
-      function changeToRandomVideo() {
-        let newIndex;
-        if (currentIndex === -1) {
-          newIndex = Math.floor(Math.random() * vimeoIds.length);
-        } else {
-          newIndex = getRandomDifferentIndex(currentIndex);
-        }
-        loadVideoByIndex(newIndex);
+    // Funció per canviar al SEGÜENT video en ordre seqüencial
+    function changeToNextVideo() {
+      const nextIndex = getNextSequentialIndex(currentIndex);
+      loadVideoByIndex(nextIndex);
+    }
+
+    function initRandomBackground() {
+      // Comprovar si hi ha un índex de sessió actiu
+      let storedIndex = getSessionIndex();
+      
+      if (storedIndex === -1) {
+        // PRIMERA CARREGA DE LA SESSIÓ: Video aleatori
+        const randomIndex = Math.floor(Math.random() * vimeoIds.length);
+        sessionStartingIndex = randomIndex;
+        loadVideoByIndex(randomIndex);
+      } else {
+        // RECARREGA DE PÀGINA DINS DE LA MATEIXA SESSIÓ:
+        // Mantenim el mateix índex (no canvia aleatòriament en recarregar)
+        // Però si vols que CANVII cada cop que recarreguis (fins i tot dins la sessió),
+        // descomenta la línia següent i comenta les dues de dalt
+        loadVideoByIndex(storedIndex);
       }
+    }
 
-      function initRandomBackground() {
-        const initialIndex = Math.floor(Math.random() * vimeoIds.length);
-        loadVideoByIndex(initialIndex);
-      }
-
-      const overlay = document.getElementById('clickOverlay');
-      if (overlay) {
-        overlay.addEventListener('click', (e) => {
-          e.stopPropagation();
-          changeToRandomVideo();
-        });
-      }
-
-      initRandomBackground();
-
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && currentPlayer) {
-          currentPlayer.play().catch(e => {});
-        }
+    const overlay = document.getElementById('clickOverlay');
+    if (overlay) {
+      overlay.addEventListener('click', (e) => {
+        e.stopPropagation();
+        changeToNextVideo();  // SEMPRE va al següent en ordre
       });
+    }
 
-      // Logo hover effect
-      const logo = document.getElementById('logo');
-      if (logo) {
-        const logoSrc = 'public/logo.png';
-        const logoSrcHover = 'public/logo-hover.png';
-        
-        logo.addEventListener('mouseenter', () => {
-          logo.src = logoSrcHover;
-        });
-        
-        logo.addEventListener('mouseleave', () => {
-          logo.src = logoSrc;
-        });
+    initRandomBackground();
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && currentPlayer) {
+        currentPlayer.play().catch(e => {});
       }
-    })();
-  </script>
+    });
+
+    // Logo hover effect
+    const logo = document.getElementById('logo');
+    if (logo) {
+      const logoSrc = 'public/logo.png';
+      const logoSrcHover = 'public/logo-hover.png';
+      
+      logo.addEventListener('mouseenter', () => {
+        logo.src = logoSrcHover;
+      });
+      
+      logo.addEventListener('mouseleave', () => {
+        logo.src = logoSrc;
+      });
+    }
+  })();
+</script>
 
 </body>
 </html>
