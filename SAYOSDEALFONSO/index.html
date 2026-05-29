@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <title>sayosdealfonso</title>
   <link rel="icon" type="image/png" href="public/favicon.png">
   <style>
@@ -54,39 +54,45 @@
       object-fit: cover;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 900px) and (orientation: portrait) {
       .video-layer iframe {
         transform: translate(-50%, -50%) scale(2);
       }
     }
 
-    @media (max-width: 740px) {
+    @media (max-width: 740px) and (orientation: portrait) {
       .video-layer iframe {
         transform: translate(-50%, -50%) scale(2.8);
       }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 600px) and (orientation: portrait) {
       .video-layer iframe {
         transform: translate(-50%, -50%) scale(3.5);
       }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 480px) and (orientation: portrait) {
       .video-layer iframe {
         transform: translate(-50%, -50%) scale(4.5);
       }
     }
 
-    @media (max-width: 400px) {
+    @media (max-width: 400px) and (orientation: portrait) {
       .video-layer iframe {
         transform: translate(-50%, -50%) scale(5.5);
       }
     }
 
-    @media (max-width: 320px) {
+    @media (max-width: 320px) and (orientation: portrait) {
       .video-layer iframe {
         transform: translate(-50%, -50%) scale(7);
+      }
+    }
+
+    @media (orientation: landscape) {
+      .video-layer iframe {
+        transform: translate(-50%, -50%) scale(1);
       }
     }
 
@@ -108,8 +114,10 @@
     .logo-container {
       position: absolute;
       top: 40px;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
       z-index: 11;
       pointer-events: auto;
       cursor: pointer;
@@ -124,11 +132,18 @@
     @media (max-width: 640px) {
       .logo-container {
         top: 20px;
-        left: 20px;
-        transform: none;
       }
       .logo-container img {
         height: 35px;
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 500px) {
+      .logo-container {
+        top: 10px;
+      }
+      .logo-container img {
+        height: 30px;
       }
     }
 
@@ -208,12 +223,9 @@
         }
       }
 
-      function createVimeoIframe(videoId, autoplay = true) {
+      function createVimeoIframe(videoId) {
         const iframe = document.createElement('iframe');
-        let src = `https://player.vimeo.com/video/${videoId}?badge=0&autopause=0&player_id=0&app_id=58479&loop=1&muted=1&controls=0&background=1`;
-        if (autoplay) {
-          src += `&autoplay=1`;
-        }
+        const src = `https://player.vimeo.com/video/${videoId}?badge=0&autopause=0&player_id=0&app_id=58479&loop=1&muted=1&controls=0&background=1&autoplay=1`;
         iframe.src = src;
         iframe.setAttribute('frameborder', '0');
         iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share');
@@ -221,12 +233,20 @@
         return iframe;
       }
 
+      function destroyPlayer(player) {
+        if (player && player.destroy) {
+          try {
+            player.destroy();
+          } catch(e) {}
+        }
+      }
+
       function loadVideoInLayer(layer, videoId, callback) {
         while (layer.firstChild) {
           layer.removeChild(layer.firstChild);
         }
         
-        const iframe = createVimeoIframe(videoId, true);
+        const iframe = createVimeoIframe(videoId);
         layer.appendChild(iframe);
         
         const player = new Vimeo.Player(iframe);
@@ -271,6 +291,7 @@
           setTimeout(() => {
             currentLayerElem.classList.add('hidden');
             
+            destroyPlayer(currentPlayer);
             currentPlayer = newPlayer;
             currentIndex = nextIndex;
             currentLayer = (currentLayer === 1) ? 2 : 1;
@@ -304,7 +325,7 @@
         
         layer2.classList.add('hidden');
         
-        const iframe = createVimeoIframe(vimeoIds[index], true);
+        const iframe = createVimeoIframe(vimeoIds[index]);
         layer1.appendChild(iframe);
         
         currentPlayer = new Vimeo.Player(iframe);
