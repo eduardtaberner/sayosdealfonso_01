@@ -100,6 +100,10 @@
       cursor: pointer;
       background: transparent;
     }
+    
+    .click-overlay.loading {
+      cursor: wait;
+    }
 
     .logo-container {
       position: absolute;
@@ -178,9 +182,11 @@
       let currentIndex = -1;
       let currentLayer = 1;
       let isChanging = false;
+      let pendingClick = false;
       
       const layer1 = document.getElementById('videoLayer1');
       const layer2 = document.getElementById('videoLayer2');
+      const overlay = document.getElementById('clickOverlay');
       
       function getStoredIndex() {
         const stored = sessionStorage.getItem('vimeoCurrentIndex');
@@ -192,6 +198,14 @@
       
       function saveIndex(index) {
         sessionStorage.setItem('vimeoCurrentIndex', index);
+      }
+
+      function setLoading(loading) {
+        if (loading) {
+          overlay.classList.add('loading');
+        } else {
+          overlay.classList.remove('loading');
+        }
       }
 
       function createVimeoIframe(videoId, autoplay = true) {
@@ -229,10 +243,22 @@
         });
       }
 
+      function completeTransition() {
+        if (pendingClick && !isChanging) {
+          pendingClick = false;
+          transitionToNextVideo();
+        }
+      }
+
       function transitionToNextVideo() {
-        if (isChanging) return;
+        if (isChanging) {
+          pendingClick = true;
+          return;
+        }
         
         isChanging = true;
+        setLoading(true);
+        pendingClick = false;
         
         const nextIndex = (currentIndex + 1) % vimeoIds.length;
         const nextVideoId = vimeoIds[nextIndex];
@@ -262,6 +288,8 @@
             }, 50);
             
             isChanging = false;
+            setLoading(false);
+            completeTransition();
           }, 50);
         });
       }
@@ -301,7 +329,6 @@
         }
       }
 
-      const overlay = document.getElementById('clickOverlay');
       if (overlay) {
         overlay.addEventListener('click', (e) => {
           e.stopPropagation();
