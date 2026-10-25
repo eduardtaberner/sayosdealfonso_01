@@ -1,0 +1,446 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>About — SAYOS DE ALFONSO</title>
+  <link rel="icon" type="image/png" href="../public/favicon.png">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:hover {
+      opacity: 0.55;
+    }
+
+    /* LOGO: MISMA POSICIÓN QUE EN LA HOME */
+
+    .logo-container {
+      position: fixed;
+      top: 40px;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .logo-container img {
+      display: block;
+      width: auto;
+      height: 50px;
+    }
+
+    /* COLUMNA IZQUIERDA */
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 35%;
+      height: 100vh;
+      height: 100dvh;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: #000;
+      z-index: 10;
+    }
+
+    .contact {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      line-height: 1.5;
+    }
+
+    .contact-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .contact-label {
+      color: #777;
+      margin-bottom: 4px;
+    }
+
+    .contact a {
+      width: fit-content;
+    }
+
+    /* COLUMNA DERECHA: SCROLL INDEPENDIENTE */
+
+    .projects {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 65%;
+      height: 100vh;
+      height: 100dvh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 130px 40px 40px;
+      scrollbar-width: none;
+    }
+
+    .projects::-webkit-scrollbar {
+      display: none;
+    }
+
+    .section-title {
+      color: #777;
+      margin-bottom: 35px;
+    }
+
+    .project-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project {
+      display: grid;
+      grid-template-columns: 1fr 70px;
+      gap: 20px;
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid #333;
+    }
+
+    .project-name {
+      line-height: 1.5;
+    }
+
+    .project-year {
+      text-align: right;
+      color: #777;
+    }
+
+    .project-category {
+      display: block;
+      color: #777;
+      margin-top: 3px;
+    }
+
+    /* MÓVIL */
+
+    @media (max-width: 640px) {
+      body {
+        height: auto;
+        min-height: 100%;
+        overflow: auto;
+      }
+
+      .logo-container {
+        top: 20px;
+      }
+
+      .logo-container img {
+        height: 35px;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        min-height: 100dvh;
+        padding: 100px 20px 35px;
+        justify-content: flex-end;
+      }
+
+      .contact {
+        gap: 20px;
+      }
+
+      .projects {
+        position: relative;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+        padding: 35px 20px 40px;
+      }
+
+      .section-title {
+        margin-bottom: 25px;
+      }
+
+      .project {
+        grid-template-columns: 1fr 45px;
+        gap: 12px;
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 500px) {
+      .logo-container {
+        top: 10px;
+      }
+
+      .logo-container img {
+        height: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGO ENLAZADO AL HOME -->
+  <a class="logo-container" href="/" aria-label="Volver a la página principal">
+    <img
+      src="../public/logo.png"
+      alt="SAYOS DE ALFONSO"
+      id="logo"
+    >
+  </a>
+
+  <!-- COLUMNA IZQUIERDA -->
+  <aside class="sidebar">
+
+    <div class="contact">
+
+      <div class="contact-group">
+        <span class="contact-label">Architects</span>
+        <span>Jep Sayós</span>
+        <span>Guille De Alfonso</span>
+      </div>
+
+      <div class="contact-group">
+        <span class="contact-label">Contact</span>
+        <a href="tel:+34690913190">+34 690 913 190</a>
+        <a href="mailto:sayosdealfonso@gmail.com">
+          sayosdealfonso@gmail.com
+        </a>
+      </div>
+
+      <div class="contact-group">
+        <span class="contact-label">Office</span>
+        <span>Passeig dels Til·lers, 22</span>
+        <span>08198 Sant Cugat del Vallès · Barcelona</span>
+      </div>
+
+      <div class="contact-group">
+        <span class="contact-label">Social</span>
+        <a
+          href="https://www.instagram.com/sayosdealfonso/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Instagram ↗
+        </a>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- COLUMNA DERECHA -->
+  <main class="projects">
+
+    <p class="section-title">Selected projects</p>
+
+    <div class="project-list">
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 01
+          <span class="project-category">Architecture</span>
+        </div>
+        <span class="project-year">2026</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 02
+          <span class="project-category">Interior design</span>
+        </div>
+        <span class="project-year">2025</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 03
+          <span class="project-category">Architecture</span>
+        </div>
+        <span class="project-year">2025</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 04
+          <span class="project-category">Residential</span>
+        </div>
+        <span class="project-year">2024</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 05
+          <span class="project-category">Interior design</span>
+        </div>
+        <span class="project-year">2024</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 06
+          <span class="project-category">Architecture</span>
+        </div>
+        <span class="project-year">2023</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 07
+          <span class="project-category">Residential</span>
+        </div>
+        <span class="project-year">2023</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 08
+          <span class="project-category">Interior design</span>
+        </div>
+        <span class="project-year">2022</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 09
+          <span class="project-category">Architecture</span>
+        </div>
+        <span class="project-year">2022</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 10
+          <span class="project-category">Residential</span>
+        </div>
+        <span class="project-year">2021</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 11
+          <span class="project-category">Interior design</span>
+        </div>
+        <span class="project-year">2021</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 12
+          <span class="project-category">Architecture</span>
+        </div>
+        <span class="project-year">2020</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 13
+          <span class="project-category">Renovation</span>
+        </div>
+        <span class="project-year">2020</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 14
+          <span class="project-category">Residential</span>
+        </div>
+        <span class="project-year">2019</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 15
+          <span class="project-category">Architecture</span>
+        </div>
+        <span class="project-year">2019</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 16
+          <span class="project-category">Interior design</span>
+        </div>
+        <span class="project-year">2018</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 17
+          <span class="project-category">Renovation</span>
+        </div>
+        <span class="project-year">2018</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 18
+          <span class="project-category">Architecture</span>
+        </div>
+        <span class="project-year">2017</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 19
+          <span class="project-category">Residential</span>
+        </div>
+        <span class="project-year">2016</span>
+      </a>
+
+      <a class="project" href="#">
+        <div class="project-name">
+          NOMBRE DEL PROYECTO 20
+          <span class="project-category">Architecture</span>
+        </div>
+        <span class="project-year">2015</span>
+      </a>
+
+    </div>
+  </main>
+
+  <script>
+    const logo = document.getElementById("logo");
+
+    logo.addEventListener("mouseenter", () => {
+      logo.src = "../public/logo-hover.png";
+    });
+
+    logo.addEventListener("mouseleave", () => {
+      logo.src = "../public/logo.png";
+    });
+  </script>
+
+</body>
+</html>
