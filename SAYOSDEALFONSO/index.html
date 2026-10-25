@@ -2,113 +2,65 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>sayosdealfonso</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>SAYOS DE ALFONSO</title>
   <link rel="icon" type="image/png" href="public/favicon.png">
+
   <style>
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
+    html,
     body {
-      overflow-y: auto;
+      width: 100%;
+      min-height: 100%;
+      background: #000;
       overflow-x: hidden;
-      background-color: #000;
     }
 
     .video-container {
       position: relative;
       width: 100%;
       height: 100vh;
-      z-index: 0;
+      height: 100dvh;
       overflow: hidden;
-      background-color: #000;
+      background: #000;
     }
 
     .video-layer {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      transition: opacity 0.3s ease-in-out;
+      inset: 0;
+      overflow: hidden;
       opacity: 1;
-      z-index: 1;
+      transition: opacity 0.4s ease;
     }
-    
-    .video-layer.hidden {
+
+    .video-layer.is-hidden {
       opacity: 0;
-      z-index: 0;
+      pointer-events: none;
     }
-    
+
+    /* El iframe mantiene una proporción 16:9 y cubre toda la ventana. */
     .video-layer iframe {
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 100%;
-      height: 100%;
-      transform: translate(-50%, -50%) scale(1.5);
+      width: max(100vw, 177.78dvh);
+      height: max(56.25vw, 100dvh);
+      transform: translate(-50%, -50%);
+      border: 0;
       pointer-events: none;
-      object-fit: cover;
-    }
-
-    @media (max-width: 900px) and (orientation: portrait) {
-      .video-layer iframe {
-        transform: translate(-50%, -50%) scale(2);
-      }
-    }
-
-    @media (max-width: 740px) and (orientation: portrait) {
-      .video-layer iframe {
-        transform: translate(-50%, -50%) scale(2.8);
-      }
-    }
-
-    @media (max-width: 600px) and (orientation: portrait) {
-      .video-layer iframe {
-        transform: translate(-50%, -50%) scale(3.5);
-      }
-    }
-
-    @media (max-width: 480px) and (orientation: portrait) {
-      .video-layer iframe {
-        transform: translate(-50%, -50%) scale(4.5);
-      }
-    }
-
-    @media (max-width: 400px) and (orientation: portrait) {
-      .video-layer iframe {
-        transform: translate(-50%, -50%) scale(5.5);
-      }
-    }
-
-    @media (max-width: 320px) and (orientation: portrait) {
-      .video-layer iframe {
-        transform: translate(-50%, -50%) scale(7);
-      }
-    }
-
-    @media (orientation: landscape) {
-      .video-layer iframe {
-        transform: translate(-50%, -50%) scale(1);
-      }
     }
 
     .click-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 10;
+      inset: 0;
+      z-index: 5;
       cursor: pointer;
       background: transparent;
-    }
-    
-    .click-overlay.loading {
-      cursor: wait;
     }
 
     .logo-container {
@@ -116,23 +68,53 @@
       top: 40px;
       left: 0;
       right: 0;
+      z-index: 6;
       display: flex;
       justify-content: center;
-      z-index: 11;
-      pointer-events: auto;
       cursor: pointer;
     }
 
     .logo-container img {
-      height: 50px;
+      display: block;
       width: auto;
-      transition: all 0.3s ease;
+      height: 50px;
+    }
+
+    .footer {
+      width: 100%;
+      padding: 10px 15px;
+      background: #fff;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .footer-text {
+      margin-bottom: 10px;
+      color: #333;
+      font: italic 9px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .footer-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .footer-logos img {
+      width: min(120px, 18vw);
+      height: auto;
     }
 
     @media (max-width: 640px) {
       .logo-container {
         top: 20px;
       }
+
       .logo-container img {
         height: 35px;
       }
@@ -142,47 +124,45 @@
       .logo-container {
         top: 10px;
       }
+
       .logo-container img {
         height: 30px;
       }
     }
-
-    .footer {
-      width: 100%;
-      background-color: white;
-      padding: 10px 15px;
-    }
   </style>
 </head>
-<body>
 
-  <div class="video-container">
-    <div id="videoLayer1" class="video-layer"></div>
-    <div id="videoLayer2" class="video-layer hidden"></div>
-    <div id="clickOverlay" class="click-overlay"></div>
-    <div class="logo-container">
+<body>
+  <main class="video-container">
+    <div class="video-layer" id="videoA"></div>
+    <div class="video-layer is-hidden" id="videoB"></div>
+
+    <div class="click-overlay" id="next-video" aria-label="Siguiente vídeo"></div>
+
+    <div class="logo-container" id="logo-link">
       <img src="public/logo.png" alt="SAYOS DE ALFONSO" id="logo">
     </div>
-  </div>
+  </main>
 
-  <div class="footer">
-    <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
-      <p style="font-style: italic; font-size: 9px; margin: 0 0 10px 0; color: #333; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-        Aquesta actuació està impulsada i subvencionada pel Departament d'Empresa i Treball i cofinançada per la Unió Europea mitjançant el Fons Social Europeu Plus.
+  <footer class="footer">
+    <div class="footer-content">
+      <p class="footer-text">
+        Aquesta actuació està impulsada i subvencionada pel Departament d'Empresa i Treball
+        i cofinançada per la Unió Europea mitjançant el Fons Social Europeu Plus.
       </p>
-      <div style="display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: nowrap;">
-        <img src="public/images/icons/icon_1.png" alt="Icona 1" style="width: min(120px, 18vw); height: auto; cursor: default;">
-        <img src="public/images/icons/icon_2.png" alt="Icona 2" style="width: min(120px, 18vw); height: auto; cursor: default;">
-        <img src="public/images/icons/icon_3.jpg" alt="Icona 3" style="width: min(120px, 18vw); height: auto; cursor: default;">
-        <img src="public/images/icons/icon_4.svg" alt="Icona 4" style="width: min(120px, 18vw); height: auto; cursor: default;">
+
+      <div class="footer-logos">
+        <img src="public/images/icons/icon_1.png" alt="Logotip institucional 1">
+        <img src="public/images/icons/icon_2.png" alt="Logotip institucional 2">
+        <img src="public/images/icons/icon_3.jpg" alt="Logotip institucional 3">
+        <img src="public/images/icons/icon_4.svg" alt="Logotip institucional 4">
       </div>
     </div>
-  </div>
+  </footer>
 
-  <script src="https://player.vimeo.com/api/player.js"></script>
   <script>
-    (function() {
-      const vimeoIds = [
+    (() => {
+      const videoIds = [
         "1196639365",
         "1190537623",
         "1196639364",
@@ -193,194 +173,83 @@
         "1196639404"
       ];
 
-      let currentPlayer = null;
-      let currentIndex = -1;
-      let currentLayer = 1;
-      let isChanging = false;
-      let pendingClick = false;
-      
-      const layer1 = document.getElementById('videoLayer1');
-      const layer2 = document.getElementById('videoLayer2');
-      const overlay = document.getElementById('clickOverlay');
-      
-      function getStoredIndex() {
-        const stored = sessionStorage.getItem('vimeoCurrentIndex');
-        if (stored !== null && !isNaN(parseInt(stored))) {
-          return parseInt(stored);
-        }
-        return -1;
-      }
-      
-      function saveIndex(index) {
-        sessionStorage.setItem('vimeoCurrentIndex', index);
+      const layers = [
+        document.getElementById("videoA"),
+        document.getElementById("videoB")
+      ];
+
+      const nextButton = document.getElementById("next-video");
+      const logo = document.getElementById("logo");
+      const logoLink = document.getElementById("logo-link");
+
+      const storageKey = "vimeoCurrentIndex";
+      let currentIndex = Number(sessionStorage.getItem(storageKey));
+      let activeLayer = 0;
+      let changing = false;
+
+      if (!Number.isInteger(currentIndex) || currentIndex < 0 || currentIndex >= videoIds.length) {
+        currentIndex = Math.floor(Math.random() * videoIds.length);
       }
 
-      function setLoading(loading) {
-        if (loading) {
-          overlay.classList.add('loading');
-        } else {
-          overlay.classList.remove('loading');
-        }
+      function videoUrl(id) {
+        return `https://player.vimeo.com/video/${id}?background=1&autoplay=1&muted=1&loop=1&autopause=0&controls=0&title=0&byline=0&portrait=0`;
       }
 
-      function createVimeoIframe(videoId) {
-        const iframe = document.createElement('iframe');
-        const src = `https://player.vimeo.com/video/${videoId}?badge=0&autopause=0&player_id=0&app_id=58479&loop=1&muted=1&controls=0&background=1&autoplay=1`;
-        iframe.src = src;
-        iframe.setAttribute('frameborder', '0');
-        iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share');
-        iframe.setAttribute('allowfullscreen', '');
-        return iframe;
-      }
-
-      function destroyPlayer(player) {
-        if (player && player.destroy) {
-          try {
-            player.destroy();
-          } catch(e) {}
-        }
-      }
-
-      function loadVideoInLayer(layer, videoId, callback) {
-        while (layer.firstChild) {
-          layer.removeChild(layer.firstChild);
-        }
-        
-        const iframe = createVimeoIframe(videoId);
+      function loadVideo(layer, id) {
+        layer.innerHTML = "";
+        const iframe = document.createElement("iframe");
+        iframe.src = videoUrl(id);
+        iframe.title = "Vídeo de fondo";
+        iframe.allow = "autoplay; fullscreen; picture-in-picture";
+        iframe.setAttribute("allowfullscreen", "");
+        iframe.setAttribute("frameborder", "0");
         layer.appendChild(iframe);
-        
-        const player = new Vimeo.Player(iframe);
-        player.setVolume(0);
-        
-        player.ready().then(() => {
-          player.play().then(() => {
-            if (callback) callback(player);
-          }).catch(() => {
-            if (callback) callback(player);
-          });
-        }).catch(() => {
-          if (callback) callback(player);
-        });
       }
 
-      function completeTransition() {
-        if (pendingClick && !isChanging) {
-          pendingClick = false;
-          transitionToNextVideo();
-        }
+      function showInitialVideo() {
+        loadVideo(layers[activeLayer], videoIds[currentIndex]);
+        sessionStorage.setItem(storageKey, currentIndex);
       }
 
-      function transitionToNextVideo() {
-        if (isChanging) {
-          pendingClick = true;
-          return;
-        }
-        
-        isChanging = true;
-        setLoading(true);
-        pendingClick = false;
-        
-        const nextIndex = (currentIndex + 1) % vimeoIds.length;
-        const nextVideoId = vimeoIds[nextIndex];
-        const currentLayerElem = (currentLayer === 1) ? layer1 : layer2;
-        const nextLayerElem = (currentLayer === 1) ? layer2 : layer1;
-        
-        nextLayerElem.classList.remove('hidden');
-        
-        loadVideoInLayer(nextLayerElem, nextVideoId, (newPlayer) => {
-          setTimeout(() => {
-            currentLayerElem.classList.add('hidden');
-            
-            destroyPlayer(currentPlayer);
-            currentPlayer = newPlayer;
-            currentIndex = nextIndex;
-            currentLayer = (currentLayer === 1) ? 2 : 1;
-            saveIndex(currentIndex);
-            
-            setTimeout(() => {
-              const oldLayerElem = (currentLayer === 1) ? layer2 : layer1;
-              oldLayerElem.classList.add('hidden');
-              
-              setTimeout(() => {
-                while (oldLayerElem.firstChild) {
-                  oldLayerElem.removeChild(oldLayerElem.firstChild);
-                }
-              }, 100);
-            }, 50);
-            
-            isChanging = false;
-            setLoading(false);
-            completeTransition();
-          }, 50);
-        });
+      function nextVideo() {
+        if (changing) return;
+        changing = true;
+
+        const nextLayerIndex = 1 - activeLayer;
+        const nextIndex = (currentIndex + 1) % videoIds.length;
+        const nextLayer = layers[nextLayerIndex];
+        const currentLayer = layers[activeLayer];
+
+        loadVideo(nextLayer, videoIds[nextIndex]);
+        nextLayer.classList.remove("is-hidden");
+        currentLayer.classList.add("is-hidden");
+
+        currentIndex = nextIndex;
+        activeLayer = nextLayerIndex;
+        sessionStorage.setItem(storageKey, currentIndex);
+
+        window.setTimeout(() => {
+          currentLayer.innerHTML = "";
+          changing = false;
+        }, 450);
       }
 
-      function loadInitialVideo(index) {
-        while (layer1.firstChild) {
-          layer1.removeChild(layer1.firstChild);
-        }
-        while (layer2.firstChild) {
-          layer2.removeChild(layer2.firstChild);
-        }
-        
-        layer2.classList.add('hidden');
-        
-        const iframe = createVimeoIframe(vimeoIds[index]);
-        layer1.appendChild(iframe);
-        
-        currentPlayer = new Vimeo.Player(iframe);
-        currentPlayer.setVolume(0);
-        currentIndex = index;
-        currentLayer = 1;
-        saveIndex(currentIndex);
-        
-        currentPlayer.ready().then(() => {
-          currentPlayer.play().catch(() => {});
-        }).catch(() => {});
-      }
+      nextButton.addEventListener("click", nextVideo);
 
-      function initRandomBackground() {
-        let storedIndex = getStoredIndex();
-        
-        if (storedIndex === -1) {
-          const randomIndex = Math.floor(Math.random() * vimeoIds.length);
-          loadInitialVideo(randomIndex);
-        } else {
-          loadInitialVideo(storedIndex);
-        }
-      }
-
-      if (overlay) {
-        overlay.addEventListener('click', (e) => {
-          e.stopPropagation();
-          transitionToNextVideo();
-        });
-      }
-
-      const logo = document.getElementById('logo');
-      if (logo) {
-        const logoSrc = 'public/logo.png';
-        const logoSrcHover = 'public/logo-hover.png';
-        logo.addEventListener('mouseenter', () => { 
-          logo.src = logoSrcHover; 
-        });
-        logo.addEventListener('mouseleave', () => { 
-          logo.src = logoSrc; 
-        });
-        
-        logo.addEventListener('click', (e) => {
-          e.stopPropagation();
-          window.location.href = 'mailto:sayosdealfonso@gmail.com';
-        });
-      }
-
-      initRandomBackground();
-
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && currentPlayer) {
-          currentPlayer.play().catch(() => {});
-        }
+      logo.addEventListener("mouseenter", () => {
+        logo.src = "public/logo-hover.png";
       });
+
+      logo.addEventListener("mouseleave", () => {
+        logo.src = "public/logo.png";
+      });
+
+      logoLink.addEventListener("click", (event) => {
+        event.stopPropagation();
+        window.location.href = "mailto:sayosdealfonso@gmail.com";
+      });
+
+      showInitialVideo();
     })();
   </script>
 </body>
