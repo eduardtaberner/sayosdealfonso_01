@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -39,30 +38,22 @@
       opacity: 0.55;
     }
 
-    /* LOGO: MISMA POSICIÓN QUE EN LA HOME */
+    /* LOGO FIJO CON FONDO NEGRO SUPERIOR */
 
-    /* LOGO Y FONDO NEGRO SUPERIOR */
-
-.logo-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
-  z-index: 30;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 40px;
-  background: #000;
-  cursor: pointer;
-}
-
-.logo-container img {
-  display: block;
-  width: auto;
-  height: 50px;
-}
+    .logo-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      z-index: 30;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 40px;
+      background: #000;
+      cursor: pointer;
+    }
 
     .logo-container img {
       display: block;
@@ -73,19 +64,19 @@
     /* COLUMNA IZQUIERDA */
 
     .sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 35%;
-  height: 100vh;
-  height: 100dvh;
-  padding: 130px 40px 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  background: #000;
-  z-index: 10;
-}
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 25%;
+      height: 100vh;
+      height: 100dvh;
+      padding: 130px 40px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      background: #000;
+      z-index: 10;
+    }
 
     .contact {
       display: flex;
@@ -111,31 +102,36 @@
 
     /* COLUMNA DERECHA: SCROLL INDEPENDIENTE */
 
-      height: 100dvh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-
-  padding: 130px 0 40px;
-
-  scrollbar-width: none;
-}
-
-.projects::-webkit-scrollbar {
-  display: none;
-}
-
-/* CONTENIDO CENTRADO Y MÁS ESTRECHO */
-.section-title,
-.project-list {
+    .projects {
+  position: fixed;
+  top: 0;
+  right: 0;
   width: 75%;
-  max-width: 620px;
-  margin-left: auto;
-  margin-right: auto;
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 130px 40px 40px;
+  scrollbar-width: none;
+  z-index: 1;
 }
 
     .projects::-webkit-scrollbar {
       display: none;
     }
+
+    /* CONTENIDO CENTRADO Y MÁS ESTRECHO */
+
+    .section-title,
+.project-list {
+  width: min(620px, 65vw);
+  position: relative;
+  left: calc(-12.5vw);
+  margin-left: auto;
+  margin-right: auto;
+}
 
     .section-title {
       color: #777;
@@ -174,14 +170,20 @@
     /* MÓVIL */
 
     @media (max-width: 640px) {
+      html,
       body {
         height: auto;
         min-height: 100%;
+      }
+
+      body {
         overflow: auto;
       }
 
       .logo-container {
-        top: 20px;
+        top: 0;
+        height: 65px;
+        padding-top: 20px;
       }
 
       .logo-container img {
@@ -189,13 +191,13 @@
       }
 
       .sidebar {
-  position: relative;
-  width: 100%;
-  height: auto;
-  min-height: 100dvh;
-  padding: 75px 20px 35px;
-  justify-content: flex-start;
-}
+        position: relative;
+        width: 100%;
+        height: auto;
+        min-height: 100dvh;
+        padding: 75px 20px 35px;
+        justify-content: flex-start;
+      }
 
       .contact {
         gap: 20px;
@@ -207,6 +209,13 @@
         height: auto;
         overflow: visible;
         padding: 35px 20px 40px;
+        z-index: auto;
+      }
+
+      .section-title,
+      .project-list {
+        width: 100%;
+        max-width: none;
       }
 
       .section-title {
@@ -221,7 +230,8 @@
 
     @media (orientation: landscape) and (max-height: 500px) {
       .logo-container {
-        top: 10px;
+        padding-top: 10px;
+        height: 70px;
       }
 
       .logo-container img {
@@ -229,17 +239,17 @@
       }
     }
 
-/* Eliminar iconos decorativos del enlace de Instagram */
-.contact a[href*="instagram.com"]::after,
-.contact a[href*="instagram.com"]::before {
-  content: none !important;
-  display: none !important;
-}
+    /* ELIMINAR ICONOS DECORATIVOS DEL ENLACE DE INSTAGRAM */
 
-.contact a[href*="instagram.com"] {
-  background-image: none !important;
-}
+    .contact a[href*="instagram.com"]::after,
+    .contact a[href*="instagram.com"]::before {
+      content: none !important;
+      display: none !important;
+    }
 
+    .contact a[href*="instagram.com"] {
+      background-image: none !important;
+    }
   </style>
 </head>
 
@@ -256,7 +266,6 @@
 
   <!-- COLUMNA IZQUIERDA -->
   <aside class="sidebar">
-
     <div class="contact">
 
       <div class="contact-group">
@@ -264,22 +273,20 @@
         <span>Jep Sayós + Guille De Alfonso</span>
       </div>
 
-      
-<div class="contact-group">
-  <span class="contact-label">Contact</span>
-  <a href="tel:+34690913190">+34 690 913 190</a>
-  <a href="mailto:sayosdealfonso@gmail.com">
-    sayosdealfonso@gmail.com
-  </a>
-  <a
-    href="https://www.instagram.com/sayosdealfonso/"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Instagram
-  </a>
-</div>
-
+      <div class="contact-group">
+        <span class="contact-label">Contact</span>
+        <a href="tel:+34690913190">+34 690 913 190</a>
+        <a href="mailto:sayosdealfonso@gmail.com">
+          sayosdealfonso@gmail.com
+        </a>
+        <a
+          href="https://www.instagram.com/sayosdealfonso/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Instagram
+        </a>
+      </div>
 
       <div class="contact-group">
         <span class="contact-label">Office</span>
@@ -287,16 +294,11 @@
         <span>08198 Sant Cugat del Vallès · Barcelona</span>
       </div>
 
-    
-        </a>
-      </div>
-
     </div>
   </aside>
 
   <!-- COLUMNA DERECHA -->
   <main class="projects">
-
     <p class="section-title">Selected projects</p>
 
     <div class="project-list">
@@ -424,7 +426,7 @@
       <a class="project" href="#">
         <div class="project-name">
           NOMBRE DEL PROYECTO 16
-          <span class="project-category">Interior design</span>
+          <span class="project-category">Architecture</span>
         </div>
         <span class="project-year">2018</span>
       </a>
