@@ -41,16 +41,28 @@
 
     /* LOGO: MISMA POSICIÓN QUE EN LA HOME */
 
-    .logo-container {
-      position: fixed;
-      top: 40px;
-      left: 0;
-      right: 0;
-      z-index: 20;
-      display: flex;
-      justify-content: center;
-      cursor: pointer;
-    }
+    /* LOGO Y FONDO NEGRO SUPERIOR */
+
+.logo-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 40px;
+  background: #000;
+  cursor: pointer;
+}
+
+.logo-container img {
+  display: block;
+  width: auto;
+  height: 50px;
+}
 
     .logo-container img {
       display: block;
@@ -99,18 +111,27 @@
 
     /* COLUMNA DERECHA: SCROLL INDEPENDIENTE */
 
-    .projects {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 65%;
-      height: 100vh;
       height: 100dvh;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      padding: 130px 40px 40px;
-      scrollbar-width: none;
-    }
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  padding: 130px 0 40px;
+
+  scrollbar-width: none;
+}
+
+.projects::-webkit-scrollbar {
+  display: none;
+}
+
+/* CONTENIDO CENTRADO Y MÁS ESTRECHO */
+.section-title,
+.project-list {
+  width: 75%;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
     .projects::-webkit-scrollbar {
       display: none;
