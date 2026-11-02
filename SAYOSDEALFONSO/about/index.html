@@ -65,19 +65,18 @@
     /* COLUMNA IZQUIERDA */
 
     .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 25%;
-      height: 100vh;
-      height: 100dvh;
-      padding: 130px 40px 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      background: #000;
-      z-index: 10;
-    }
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 25%;
+  height: auto;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: #000;
+  z-index: 10;
+}
 
     .contact {
       display: flex;
@@ -127,7 +126,7 @@
 
     .section-title,
 .project-list {
-  width: min(640px, 55vw);
+  width: min(580px, 55vw);
   position: relative;
   left: calc(-12.5vw);
   margin-left: auto;
@@ -163,14 +162,15 @@
     }
 
     .project-category {
-      display: block;
-      color: #777;
-      margin-top: 3px;
-    }
+  display: block;
+  color: #fff;
+  font-style: italic;
+  margin-top: 3px;
+}
 
     /* MÓVIL */
 
-    @media (max-width: 640px) {
+    @media (max-width: 900px) {
       html,
       body {
         height: auto;
