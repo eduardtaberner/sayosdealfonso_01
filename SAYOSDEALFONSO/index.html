@@ -1,14 +1,16 @@
+
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
   <title>SAYOS DE ALFONSO</title>
+
   <meta name="description" content="SAYOS DE ALFONSO — Architecture studio by Jep Sayós and Guille De Alfonso, based in Barcelona.">
+  <meta name="author" content="Jep Sayós and Guille De Alfonso">
+  <meta name="keywords" content="SAYOS DE ALFONSO, Jep Sayos, Guille De Alfonso, architecture, architects, Barcelona">
 
-<meta name="author" content="Jep Sayós and Guille De Alfonso">
-
-<meta name="keywords" content="SAYOS DE ALFONSO, Jep Sayos, Guille De Alfonso, architecture, architects, Barcelona">
   <link rel="icon" type="image/png" href="public/favicon1995.png">
 
   <style>
@@ -48,7 +50,6 @@
       pointer-events: none;
     }
 
-    /* El iframe mantiene una proporción 16:9 y cubre toda la ventana. */
     .video-layer iframe {
       position: absolute;
       top: 50%;
@@ -69,21 +70,21 @@
     }
 
     .logo-container {
-      position: absolute;
-      top: 40px;
-      left: 0;
-      right: 0;
-      z-index: 6;
-      display: flex;
-      justify-content: center;
-      cursor: pointer;
-    }
+  position: fixed;
+  top: 40px;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
 
-    .logo-container img {
-      display: block;
-      width: auto;
-      height: 40px;
-    }
+.logo-container img {
+  display: block;
+  width: auto;
+  height: 40px;
+}
 
     .footer {
       width: 100%;
@@ -142,32 +143,38 @@
     <div class="video-layer" id="videoA"></div>
     <div class="video-layer is-hidden" id="videoB"></div>
 
-    <div class="click-overlay" id="next-video" aria-label="Siguiente vídeo"></div>
+    <div
+      class="click-overlay"
+      id="next-video"
+      aria-label="Siguiente vídeo"
+    ></div>
 
     <div class="logo-container" id="logo-link">
-      <img src="public/logo.png" alt="SAYOS DE ALFONSO" id="logo">
+      <img
+        src="public/logo.png"
+        alt="SAYOS DE ALFONSO"
+        id="logo"
+      >
     </div>
   </main>
 
   <footer class="footer">
-  <div class="footer-content">
+    <div class="footer-content">
 
+      <p class="footer-text">
+        Aquesta actuació està impulsada i subvencionada pel Departament d'Empresa i Treball
+        i cofinançada per la Unió Europea mitjançant el Fons Social Europeu Plus.
+      </p>
 
+      <div class="footer-logos">
+        <img src="public/images/icons/icon_1.png" alt="Logotip institucional 1">
+        <img src="public/images/icons/icon_2.png" alt="Logotip institucional 2">
+        <img src="public/images/icons/icon_3.jpg" alt="Logotip institucional 3">
+        <img src="public/images/icons/icon_4.svg" alt="Logotip institucional 4">
+      </div>
 
-    <p class="footer-text">
-      Aquesta actuació està impulsada i subvencionada pel Departament d'Empresa i Treball
-      i cofinançada per la Unió Europea mitjançant el Fons Social Europeu Plus.
-    </p>
-
-    <div class="footer-logos">
-      <img src="public/images/icons/icon_1.png" alt="Logotip institucional 1">
-      <img src="public/images/icons/icon_2.png" alt="Logotip institucional 2">
-      <img src="public/images/icons/icon_3.jpg" alt="Logotip institucional 3">
-      <img src="public/images/icons/icon_4.svg" alt="Logotip institucional 4">
     </div>
-
-  </div>
-</footer>
+  </footer>
 
   <script>
     (() => {
@@ -189,11 +196,16 @@
       const logoLink = document.getElementById("logo-link");
 
       const storageKey = "vimeoCurrentIndex";
+
       let currentIndex = Number(sessionStorage.getItem(storageKey));
       let activeLayer = 0;
       let changing = false;
 
-      if (!Number.isInteger(currentIndex) || currentIndex < 0 || currentIndex >= videoIds.length) {
+      if (
+        !Number.isInteger(currentIndex) ||
+        currentIndex < 0 ||
+        currentIndex >= videoIds.length
+      ) {
         currentIndex = Math.floor(Math.random() * videoIds.length);
       }
 
@@ -203,12 +215,15 @@
 
       function loadVideo(layer, id) {
         layer.innerHTML = "";
+
         const iframe = document.createElement("iframe");
+
         iframe.src = videoUrl(id);
         iframe.title = "Vídeo de fondo";
         iframe.allow = "autoplay; fullscreen; picture-in-picture";
         iframe.setAttribute("allowfullscreen", "");
         iframe.setAttribute("frameborder", "0");
+
         layer.appendChild(iframe);
       }
 
@@ -219,19 +234,23 @@
 
       function nextVideo() {
         if (changing) return;
+
         changing = true;
 
         const nextLayerIndex = 1 - activeLayer;
         const nextIndex = (currentIndex + 1) % videoIds.length;
+
         const nextLayer = layers[nextLayerIndex];
         const currentLayer = layers[activeLayer];
 
         loadVideo(nextLayer, videoIds[nextIndex]);
+
         nextLayer.classList.remove("is-hidden");
         currentLayer.classList.add("is-hidden");
 
         currentIndex = nextIndex;
         activeLayer = nextLayerIndex;
+
         sessionStorage.setItem(storageKey, currentIndex);
 
         window.setTimeout(() => {
