@@ -165,7 +165,7 @@
       margin-top: 3px;
     }
 
-    /* MÓVIL */
+    /* MÓVIL: AJUSTES DE ESTRUCTURA */
 
     @media (max-width: 1200px) {
       html,
@@ -176,14 +176,6 @@
 
       body {
         overflow: auto;
-      }
-
-      .logo-container {
-        top: 20px;
-      }
-
-      .logo-container img {
-        height: 35px;
       }
 
       .sidebar {
@@ -228,7 +220,19 @@
       }
     }
 
-    /* LANDSCAPE PEQUEÑO */
+    /* LOGO EN MÓVIL: MISMAS MEDIDAS QUE HOME */
+
+    @media (max-width: 640px) {
+      .logo-container {
+        top: 20px;
+      }
+
+      .logo-container img {
+        height: 35px;
+      }
+    }
+
+    /* LANDSCAPE PEQUEÑO: MISMAS MEDIDAS QUE HOME */
 
     @media (orientation: landscape) and (max-height: 500px) {
       .logo-container {
@@ -300,7 +304,6 @@
     </div>
   </aside>
 
-
   <!-- COLUMNA DERECHA -->
 
   <main class="projects">
@@ -312,9 +315,7 @@
       <div class="project">
         <div class="project-name">
           Ground Floor Renovation, Sarrià, Barcelona
-          <span class="project-category">
-            Project · Ongoing
-          </span>
+          <span class="project-category">Project · Ongoing</span>
         </div>
         <span class="project-year">2026</span>
       </div>
@@ -322,9 +323,7 @@
       <div class="project">
         <div class="project-name">
           Digital Arts Biennial, DHub Museum, Barcelona
-          <span class="project-category">
-            Exhibition · Ongoing
-          </span>
+          <span class="project-category">Exhibition · Ongoing</span>
         </div>
         <span class="project-year">2026</span>
       </div>
@@ -332,9 +331,7 @@
       <div class="project">
         <div class="project-name">
           21 Social Dwellings, Santa Coloma de Gramenet
-          <span class="project-category">
-            Competition
-          </span>
+          <span class="project-category">Competition</span>
         </div>
         <span class="project-year">2026</span>
       </div>
@@ -342,9 +339,7 @@
       <div class="project">
         <div class="project-name">
           TAC Pavilion, Barcelona · 3rd Prize
-          <span class="project-category">
-            Competition
-          </span>
+          <span class="project-category">Competition</span>
         </div>
         <span class="project-year">2026</span>
       </div>
@@ -352,9 +347,7 @@
       <div class="project">
         <div class="project-name">
           Fire Station, Vilanova i la Geltrú · 1st Prize
-          <span class="project-category">
-            Competition · Ongoing · In collaboration with Agencia Material
-          </span>
+          <span class="project-category">Competition · Ongoing · In collaboration with Agencia Material</span>
         </div>
         <span class="project-year">2026</span>
       </div>
@@ -362,9 +355,7 @@
       <div class="project">
         <div class="project-name">
           Theatre and Music School, Mallorca · 3rd Prize
-          <span class="project-category">
-            Competition · In collaboration with Leve
-          </span>
+          <span class="project-category">Competition · In collaboration with Leve</span>
         </div>
         <span class="project-year">2026</span>
       </div>
@@ -372,9 +363,7 @@
       <div class="project">
         <div class="project-name">
           Can Ferrer Civic Centre, Barcelona
-          <span class="project-category">
-            Competition · In collaboration with Barlebyt
-          </span>
+          <span class="project-category">Competition · In collaboration with Barlebyt</span>
         </div>
         <span class="project-year">2025</span>
       </div>
@@ -382,9 +371,7 @@
       <div class="project">
         <div class="project-name">
           4-Unit Housing, Puigcerdà, Girona
-          <span class="project-category">
-            Project
-          </span>
+          <span class="project-category">Project</span>
         </div>
         <span class="project-year">2025</span>
       </div>
@@ -392,16 +379,13 @@
       <div class="project">
         <div class="project-name">
           House, Villafufre, Cantabria
-          <span class="project-category">
-            Project · Ongoing
-          </span>
+          <span class="project-category">Project · Ongoing</span>
         </div>
         <span class="project-year">2025</span>
       </div>
 
     </div>
   </main>
-
 
   <script>
     const logo = document.getElementById("logo");
