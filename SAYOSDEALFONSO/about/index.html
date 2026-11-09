@@ -1,10 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
   <title>Work | SAYOS DE ALFONSO</title>
+
   <link rel="icon" type="image/png" href="../public/favicon1995.png">
 
   <style>
@@ -44,11 +45,13 @@
     .logo-container {
       position: fixed;
       top: 40px;
-      left: 0;
-      right: 0;
+      left: 50%;
+      right: auto;
+      width: max-content;
       z-index: 30;
-      display: flex;
-      justify-content: center;
+      display: block;
+      line-height: 0;
+      transform: translateX(-50%);
       cursor: pointer;
     }
 
@@ -56,6 +59,8 @@
       display: block;
       width: auto;
       height: 40px;
+      margin: 0;
+      padding: 0;
     }
 
     /* COLUMNA IZQUIERDA */
@@ -165,7 +170,7 @@
       margin-top: 3px;
     }
 
-    /* MÓVIL: AJUSTES DE ESTRUCTURA */
+    /* AJUSTES DE ESTRUCTURA */
 
     @media (max-width: 1200px) {
       html,
@@ -220,7 +225,7 @@
       }
     }
 
-    /* LOGO EN MÓVIL: MISMAS MEDIDAS QUE HOME */
+    /* MÓVIL: MISMAS MEDIDAS QUE HOME */
 
     @media (max-width: 640px) {
       .logo-container {
@@ -261,6 +266,7 @@
 <body>
 
   <!-- LOGO ENLAZADO AL HOME -->
+
   <a class="logo-container" href="/" aria-label="Volver a la página principal">
     <img
       src="../public/logo.png"
