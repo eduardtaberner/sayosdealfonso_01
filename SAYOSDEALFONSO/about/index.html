@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -38,24 +39,18 @@
       opacity: 1;
     }
 
-    /* LOGO FIJO CON FONDO NEGRO SUPERIOR */
+    /* LOGO */
 
     .logo-container {
-  position: fixed;
-  top: 40px;
-  left: 0;
-  right: 0;
-  z-index: 30;
-  display: flex;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.logo-container img {
-  display: block;
-  width: auto;
-  height: 40px;
-}
+      position: absolute;
+      top: 40px;
+      left: 0;
+      right: 0;
+      z-index: 30;
+      display: flex;
+      justify-content: center;
+      cursor: pointer;
+    }
 
     .logo-container img {
       display: block;
@@ -66,18 +61,18 @@
     /* COLUMNA IZQUIERDA */
 
     .sidebar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 25%;
-  height: auto;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  background: #000;
-  z-index: 10;
-}
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 25%;
+      height: auto;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: #000;
+      z-index: 10;
+    }
 
     .contact {
       display: flex;
@@ -104,21 +99,21 @@
     /* COLUMNA DERECHA: SCROLL INDEPENDIENTE */
 
     .projects {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 75%;
-  height: 100vh;
-  height: 100dvh;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  overscroll-behavior-y: contain;
-  -webkit-overflow-scrolling: touch;
-  padding: 130px 40px 40px;
-   scroll-padding-bottom: 300px;
-  scrollbar-width: none;
-  z-index: 1;
-}
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 75%;
+      height: 100vh;
+      height: 100dvh;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+      padding: 130px 40px 40px;
+      scroll-padding-bottom: 300px;
+      scrollbar-width: none;
+      z-index: 1;
+    }
 
     .projects::-webkit-scrollbar {
       display: none;
@@ -127,13 +122,13 @@
     /* CONTENIDO CENTRADO Y MÁS ESTRECHO */
 
     .section-title,
-.project-list {
-  width: min(580px, 55vw);
-  position: relative;
-  left: calc(-12.5vw);
-  margin-left: auto;
-  margin-right: auto;
-}
+    .project-list {
+      width: min(580px, 55vw);
+      position: relative;
+      left: calc(-12.5vw);
+      margin-left: auto;
+      margin-right: auto;
+    }
 
     .section-title {
       color: #777;
@@ -141,10 +136,10 @@
     }
 
     .project-list {
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 20vh;
-}
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 20vh;
+    }
 
     .project {
       display: grid;
@@ -165,10 +160,10 @@
     }
 
     .project-category {
-  display: block;
-  color: #999;
-  margin-top: 3px;
-}
+      display: block;
+      color: #999;
+      margin-top: 3px;
+    }
 
     /* MÓVIL */
 
@@ -184,9 +179,7 @@
       }
 
       .logo-container {
-        top: 0;
-        height: 65px;
-        padding-top: 20px;
+        top: 20px;
       }
 
       .logo-container img {
@@ -235,10 +228,11 @@
       }
     }
 
+    /* LANDSCAPE PEQUEÑO */
+
     @media (orientation: landscape) and (max-height: 500px) {
       .logo-container {
-        padding-top: 10px;
-        height: 70px;
+        top: 10px;
       }
 
       .logo-container img {
@@ -272,15 +266,21 @@
   </a>
 
   <!-- COLUMNA IZQUIERDA -->
+
   <aside class="sidebar">
     <div class="contact">
 
-      
-
       <div class="contact-group">
         <span class="contact-label">Contact</span>
-        <a href="tel:+34690913990">+34 690 913 990</a>
-        <a href="tel:+34608258184">+34 608 258 184</a>
+
+        <a href="tel:+34690913990">
+          +34 690 913 990
+        </a>
+
+        <a href="tel:+34608258184">
+          +34 608 258 184
+        </a>
+
         <a
           href="https://www.instagram.com/sayosdealfonso/"
           target="_blank"
@@ -292,6 +292,7 @@
 
       <div class="contact-group">
         <span class="contact-label">Office</span>
+
         <span>Passeig dels Til·lers 26</span>
         <span>08198 La Floresta · Barcelona</span>
       </div>
@@ -300,86 +301,106 @@
   </aside>
 
 
-<!-- COLUMNA DERECHA -->
-<main class="projects">
-  <p class="section-title">Work</p>
+  <!-- COLUMNA DERECHA -->
 
-  <div class="project-list">
+  <main class="projects">
 
-    <div class="project">
-      <div class="project-name">
-        Ground Floor Renovation, Sarrià, Barcelona
-        <span class="project-category">Project · Ongoing</span>
+    <p class="section-title">Work</p>
+
+    <div class="project-list">
+
+      <div class="project">
+        <div class="project-name">
+          Ground Floor Renovation, Sarrià, Barcelona
+          <span class="project-category">
+            Project · Ongoing
+          </span>
+        </div>
+        <span class="project-year">2026</span>
       </div>
-      <span class="project-year">2026</span>
-    </div>
 
-    <div class="project">
-      <div class="project-name">
-        Digital Arts Biennial, DHub Museum, Barcelona
-        <span class="project-category">Exhibition · Ongoing</span>
+      <div class="project">
+        <div class="project-name">
+          Digital Arts Biennial, DHub Museum, Barcelona
+          <span class="project-category">
+            Exhibition · Ongoing
+          </span>
+        </div>
+        <span class="project-year">2026</span>
       </div>
-      <span class="project-year">2026</span>
-    </div>
 
-    <div class="project">
-      <div class="project-name">
-        21 Social Dwellings, Santa Coloma de Gramenet
-        <span class="project-category">Competition</span>
+      <div class="project">
+        <div class="project-name">
+          21 Social Dwellings, Santa Coloma de Gramenet
+          <span class="project-category">
+            Competition
+          </span>
+        </div>
+        <span class="project-year">2026</span>
       </div>
-      <span class="project-year">2026</span>
-    </div>
 
-    <div class="project">
-      <div class="project-name">
-        TAC Pavilion, Barcelona · 3rd Prize
-        <span class="project-category">Competition</span>
+      <div class="project">
+        <div class="project-name">
+          TAC Pavilion, Barcelona · 3rd Prize
+          <span class="project-category">
+            Competition
+          </span>
+        </div>
+        <span class="project-year">2026</span>
       </div>
-      <span class="project-year">2026</span>
-    </div>
 
-    <div class="project">
-      <div class="project-name">
-        Fire Station, Vilanova i la Geltrú · 1st Prize
-        <span class="project-category">Competition · Ongoing · In collaboration with Agencia Material</span>
+      <div class="project">
+        <div class="project-name">
+          Fire Station, Vilanova i la Geltrú · 1st Prize
+          <span class="project-category">
+            Competition · Ongoing · In collaboration with Agencia Material
+          </span>
+        </div>
+        <span class="project-year">2026</span>
       </div>
-      <span class="project-year">2026</span>
-    </div>
 
-    <div class="project">
-      <div class="project-name">
-        Theatre and Music School, Mallorca · 3rd Prize
-        <span class="project-category">Competition · In collaboration with Leve</span>
+      <div class="project">
+        <div class="project-name">
+          Theatre and Music School, Mallorca · 3rd Prize
+          <span class="project-category">
+            Competition · In collaboration with Leve
+          </span>
+        </div>
+        <span class="project-year">2026</span>
       </div>
-      <span class="project-year">2026</span>
-    </div>
 
-    <div class="project">
-      <div class="project-name">
-        Can Ferrer Civic Centre, Barcelona
-        <span class="project-category">Competition · In collaboration with Barlebyt</span>
+      <div class="project">
+        <div class="project-name">
+          Can Ferrer Civic Centre, Barcelona
+          <span class="project-category">
+            Competition · In collaboration with Barlebyt
+          </span>
+        </div>
+        <span class="project-year">2025</span>
       </div>
-      <span class="project-year">2025</span>
-    </div>
 
-    <div class="project">
-      <div class="project-name">
-        4-Unit Housing, Puigcerdà, Girona
-        <span class="project-category">Project</span>
+      <div class="project">
+        <div class="project-name">
+          4-Unit Housing, Puigcerdà, Girona
+          <span class="project-category">
+            Project
+          </span>
+        </div>
+        <span class="project-year">2025</span>
       </div>
-      <span class="project-year">2025</span>
-    </div>
 
-    <div class="project">
-      <div class="project-name">
-        House, Villafufre, Cantabria
-        <span class="project-category">Project · Ongoing</span>
+      <div class="project">
+        <div class="project-name">
+          House, Villafufre, Cantabria
+          <span class="project-category">
+            Project · Ongoing
+          </span>
+        </div>
+        <span class="project-year">2025</span>
       </div>
-      <span class="project-year">2025</span>
-    </div>
 
-  </div>
-</main>
+    </div>
+  </main>
 
 
   <script>
