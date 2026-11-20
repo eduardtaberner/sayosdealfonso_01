@@ -42,26 +42,31 @@
 
     /* LOGO */
 
-    .logo-container {
-      position: fixed;
-      top: 40px;
-      left: 50%;
-      right: auto;
-      width: max-content;
-      z-index: 30;
-      display: block;
-      line-height: 0;
-      transform: translateX(-50%);
-      cursor: pointer;
-    }
+.logo-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 40px;
+  background: #000;
+  cursor: pointer;
+  line-height: 0;
+}
 
-    .logo-container img {
-      display: block;
-      width: auto;
-      height: 40px;
-      margin: 0;
-      padding: 0;
-    }
+.logo-container img {
+  display: block;
+  width: auto;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+}
+
+  
 
     /* COLUMNA IZQUIERDA */
 
@@ -124,7 +129,7 @@
       display: none;
     }
 
-    /* CONTENIDO CENTRADO Y MÁS ESTRECHO */
+    /* CONTENIDO CENTRADO */
 
     .section-title,
     .project-list {
@@ -170,9 +175,10 @@
       margin-top: 3px;
     }
 
-    /* AJUSTES DE ESTRUCTURA */
+    /* TABLET / MÓVIL */
 
     @media (max-width: 1200px) {
+
       html,
       body {
         height: auto;
@@ -181,6 +187,14 @@
 
       body {
         overflow: auto;
+      }
+
+      /* LOGO */
+
+      .logo-container {
+        width: 100%;
+        top: 40px;
+        height: 40px;
       }
 
       .sidebar {
@@ -225,11 +239,13 @@
       }
     }
 
-    /* MÓVIL: MISMAS MEDIDAS QUE HOME */
+    /* MÓVIL */
 
     @media (max-width: 640px) {
+
       .logo-container {
         top: 20px;
+        height: 35px;
       }
 
       .logo-container img {
@@ -237,11 +253,13 @@
       }
     }
 
-    /* LANDSCAPE PEQUEÑO: MISMAS MEDIDAS QUE HOME */
+    /* LANDSCAPE PEQUEÑO */
 
     @media (orientation: landscape) and (max-height: 500px) {
+
       .logo-container {
         top: 10px;
+        height: 30px;
       }
 
       .logo-container img {
@@ -249,7 +267,7 @@
       }
     }
 
-    /* ELIMINAR ICONOS DECORATIVOS DEL ENLACE DE INSTAGRAM */
+    /* INSTAGRAM */
 
     .contact a[href*="instagram.com"]::after,
     .contact a[href*="instagram.com"]::before {
@@ -265,9 +283,13 @@
 
 <body>
 
-  <!-- LOGO ENLAZADO AL HOME -->
+  <!-- LOGO -->
 
-  <a class="logo-container" href="/" aria-label="Volver a la página principal">
+  <a
+    class="logo-container"
+    href="/"
+    aria-label="Volver a la página principal"
+  >
     <img
       src="../public/logo.png"
       alt="SAYOS DE ALFONSO"
@@ -281,6 +303,7 @@
     <div class="contact">
 
       <div class="contact-group">
+
         <span class="contact-label">Contact</span>
 
         <a href="tel:+34690913990">
@@ -298,13 +321,16 @@
         >
           @sayosdealfonso
         </a>
+
       </div>
 
       <div class="contact-group">
+
         <span class="contact-label">Office</span>
 
         <span>Passeig dels Til·lers 26</span>
         <span>08198 La Floresta · Barcelona</span>
+
       </div>
 
     </div>
@@ -353,7 +379,9 @@
       <div class="project">
         <div class="project-name">
           Fire Station, Vilanova i la Geltrú · 1st Prize
-          <span class="project-category">Competition · Ongoing · In collaboration with Agencia Material</span>
+          <span class="project-category">
+            Competition · Ongoing · In collaboration with Agencia Material
+          </span>
         </div>
         <span class="project-year">2026</span>
       </div>
@@ -361,7 +389,9 @@
       <div class="project">
         <div class="project-name">
           Theatre and Music School, Mallorca · 3rd Prize
-          <span class="project-category">Competition · In collaboration with Leve</span>
+          <span class="project-category">
+            Competition · In collaboration with Leve
+          </span>
         </div>
         <span class="project-year">2026</span>
       </div>
@@ -369,7 +399,9 @@
       <div class="project">
         <div class="project-name">
           Can Ferrer Civic Centre, Barcelona
-          <span class="project-category">Competition · In collaboration with Barlebyt</span>
+          <span class="project-category">
+            Competition · In collaboration with Barlebyt
+          </span>
         </div>
         <span class="project-year">2025</span>
       </div>
@@ -391,6 +423,7 @@
       </div>
 
     </div>
+
   </main>
 
   <script>
