@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,6 +50,8 @@
       pointer-events: none;
     }
 
+    /* VÍDEOS HORIZONTALES */
+
     .video-layer iframe {
       position: absolute;
       top: 50%;
@@ -58,6 +61,13 @@
       transform: translate(-50%, -50%);
       border: 0;
       pointer-events: none;
+    }
+
+    /* VÍDEOS VERTICALES */
+
+    body.vertical-video .video-layer iframe {
+      width: max(100vw, 56.25dvh);
+      height: max(177.78vw, 100dvh);
     }
 
     .click-overlay {
@@ -200,13 +210,47 @@
 
   <script>
     (() => {
-      const videoIds = [
-        "1196639365",
-        "1196639362",
-        "1196639406",
-        "1196639383",
-        "1196639407"
+
+      /* VÍDEOS HORIZONTALES */
+
+      const horizontalVideos = [
+        "1248649478",
+        "1248649477",
+        "1248649498",
+        "1248649499",
+        "1248649517"
       ];
+
+      /* VÍDEOS VERTICALES */
+
+      const verticalVideos = [
+        "1248649476",
+        "1248649475",
+        "1248649500",
+        "1248649501",
+        "1248649518"
+      ];
+
+      /* DETECTAR DISPOSITIVO */
+
+      const mobileQuery = window.matchMedia(
+        "(max-width: 640px), (pointer: coarse)"
+      );
+
+      function getVideoList() {
+        return mobileQuery.matches
+          ? verticalVideos
+          : horizontalVideos;
+      }
+
+      document.body.classList.toggle(
+        "vertical-video",
+        mobileQuery.matches
+      );
+
+      let videoIds = getVideoList();
+
+      /* ELEMENTOS */
 
       const layers = [
         document.getElementById("videoA"),
@@ -218,7 +262,11 @@
 
       const storageKey = "vimeoCurrentIndex";
 
-      let currentIndex = Number(sessionStorage.getItem(storageKey));
+      let savedIndex = sessionStorage.getItem(storageKey);
+      let currentIndex = savedIndex === null
+        ? Math.floor(Math.random() * videoIds.length)
+        : Number(savedIndex);
+
       let activeLayer = 0;
       let changing = false;
 
@@ -230,9 +278,13 @@
         currentIndex = Math.floor(Math.random() * videoIds.length);
       }
 
+      /* URL DE VIMEO */
+
       function videoUrl(id) {
         return `https://player.vimeo.com/video/${id}?background=1&autoplay=1&muted=1&loop=1&autopause=0&controls=0&title=0&byline=0&portrait=0`;
       }
+
+      /* CARGAR VÍDEO */
 
       function loadVideo(layer, id) {
         layer.innerHTML = "";
@@ -248,10 +300,14 @@
         layer.appendChild(iframe);
       }
 
+      /* VÍDEO INICIAL */
+
       function showInitialVideo() {
         loadVideo(layers[activeLayer], videoIds[currentIndex]);
         sessionStorage.setItem(storageKey, currentIndex);
       }
+
+      /* CAMBIAR VÍDEO */
 
       function nextVideo() {
         if (changing) return;
@@ -280,6 +336,29 @@
         }, 450);
       }
 
+      /* CAMBIAR ENTRE VÍDEOS VERTICALES Y HORIZONTALES
+         SI CAMBIA EL TAMAÑO DEL DISPOSITIVO */
+
+      mobileQuery.addEventListener("change", () => {
+        videoIds = getVideoList();
+
+        document.body.classList.toggle(
+          "vertical-video",
+          mobileQuery.matches
+        );
+
+        layers.forEach((layer, index) => {
+          if (index !== activeLayer) {
+            layer.innerHTML = "";
+            layer.classList.add("is-hidden");
+          }
+        });
+
+        loadVideo(layers[activeLayer], videoIds[currentIndex]);
+      });
+
+      /* EVENTOS */
+
       nextButton.addEventListener("click", nextVideo);
 
       logo.addEventListener("mouseenter", () => {
@@ -291,6 +370,7 @@
       });
 
       showInitialVideo();
+
     })();
   </script>
 
