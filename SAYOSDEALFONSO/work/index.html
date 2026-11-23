@@ -42,31 +42,30 @@
 
     /* LOGO */
 
-.logo-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  z-index: 30;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 40px;
-  background: #000;
-  cursor: pointer;
-  line-height: 0;
-}
+    .logo-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      z-index: 30;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 40px;
+      background: #000;
+      cursor: pointer;
+      line-height: 0;
+    }
 
-.logo-container img {
-  display: block;
-  width: auto;
-  height: 40px;
-  margin: 0;
-  padding: 0;
-}
+    .logo-container img {
+      display: block;
+      width: auto;
+      height: 40px;
+      margin: 0;
+      padding: 0;
+    }
 
-  
 
     /* COLUMNA IZQUIERDA */
 
@@ -106,6 +105,7 @@
       width: fit-content;
     }
 
+
     /* COLUMNA DERECHA: SCROLL INDEPENDIENTE */
 
     .projects {
@@ -128,6 +128,7 @@
     .projects::-webkit-scrollbar {
       display: none;
     }
+
 
     /* CONTENIDO CENTRADO */
 
@@ -175,27 +176,40 @@
       margin-top: 3px;
     }
 
+
     /* TABLET / MÓVIL */
 
-    @media (max-width: 1200px) {
+@media (max-width: 1200px) {
 
-      html,
-      body {
-        height: auto;
-        min-height: 100%;
-      }
+  html,
+  body {
+    height: auto;
+    min-height: 100%;
+  }
 
-      body {
-        overflow: auto;
-      }
+  body {
+    overflow: auto;
+  }
 
-      /* LOGO */
+  /* LOGO */
 
-      .logo-container {
-        width: 100%;
-        top: 40px;
-        height: 40px;
-      }
+  .logo-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    padding-top: 40px;
+    background: #000;
+    z-index: 30;
+  }
+
+  .logo-container img {
+    height: 40px;
+  }
+
+
+      /* COLUMNA IZQUIERDA */
 
       .sidebar {
         position: relative;
@@ -209,6 +223,9 @@
       .contact {
         gap: 12px;
       }
+
+
+      /* PROJECTS */
 
       .projects {
         position: relative;
@@ -239,6 +256,7 @@
       }
     }
 
+
     /* MÓVIL */
 
     @media (max-width: 640px) {
@@ -253,6 +271,7 @@
       }
     }
 
+
     /* LANDSCAPE PEQUEÑO */
 
     @media (orientation: landscape) and (max-height: 500px) {
@@ -266,6 +285,7 @@
         height: 30px;
       }
     }
+
 
     /* INSTAGRAM */
 
@@ -297,6 +317,7 @@
     >
   </a>
 
+
   <!-- COLUMNA IZQUIERDA -->
 
   <aside class="sidebar">
@@ -324,6 +345,7 @@
 
       </div>
 
+
       <div class="contact-group">
 
         <span class="contact-label">Office</span>
@@ -335,6 +357,7 @@
 
     </div>
   </aside>
+
 
   <!-- COLUMNA DERECHA -->
 
@@ -352,6 +375,7 @@
         <span class="project-year">2026</span>
       </div>
 
+
       <div class="project">
         <div class="project-name">
           Digital Arts Biennial, DHub Museum, Barcelona
@@ -359,6 +383,7 @@
         </div>
         <span class="project-year">2026</span>
       </div>
+
 
       <div class="project">
         <div class="project-name">
@@ -368,6 +393,7 @@
         <span class="project-year">2026</span>
       </div>
 
+
       <div class="project">
         <div class="project-name">
           TAC Pavilion, Barcelona · 3rd Prize
@@ -375,6 +401,7 @@
         </div>
         <span class="project-year">2026</span>
       </div>
+
 
       <div class="project">
         <div class="project-name">
@@ -386,6 +413,7 @@
         <span class="project-year">2026</span>
       </div>
 
+
       <div class="project">
         <div class="project-name">
           Theatre and Music School, Mallorca · 3rd Prize
@@ -395,6 +423,7 @@
         </div>
         <span class="project-year">2026</span>
       </div>
+
 
       <div class="project">
         <div class="project-name">
@@ -406,6 +435,7 @@
         <span class="project-year">2025</span>
       </div>
 
+
       <div class="project">
         <div class="project-name">
           4-Unit Housing, Puigcerdà, Girona
@@ -413,6 +443,7 @@
         </div>
         <span class="project-year">2025</span>
       </div>
+
 
       <div class="project">
         <div class="project-name">
@@ -425,6 +456,7 @@
     </div>
 
   </main>
+
 
   <script>
     const logo = document.getElementById("logo");
